@@ -1,6 +1,6 @@
 
 #Establecer directorio
-setwd("/Users/camilaortiz/Dropbox/PEG/BigData/Taller1")
+setwd("/Users/camilaortiz/Dropbox/PEG/BigData/ProblemSet1_G10")
 
 #Descargar paquetes
 require(pacman)
