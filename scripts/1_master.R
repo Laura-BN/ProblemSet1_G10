@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------//
-# x
+# Mastet Problem Set 1 - BDML 202501
 # Fecha: 
 #-----------------------------------------------------------------------------//
 
@@ -9,9 +9,9 @@ rm(list = ls())
 # 1. Ruta de los archivos ----
 #-----------------------------------------------------------------------------//
 
-# Users
+# Users: ejecutar segùn el usuario de cada una/o
 
-path_user = "F:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub"
+path_user = "H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub"
 
 path_main = "ProblemSet1_G10"
 path_gen = file.path(path_user, path_main)
@@ -29,4 +29,15 @@ p_load(tidyverse,
        rvest,
        dplyr,
        stargazer, 
-       foreign) 
+       foreign, 
+       skimr, # summary data
+       visdat, # visualizing missing data
+       corrplot, 
+       scales, 
+       broom, 
+       xtable, 
+       gridExtra, 
+       survey) 
+
+install.packages("gridExtra")
+library(gridExtra)
