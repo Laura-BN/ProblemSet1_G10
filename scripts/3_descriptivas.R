@@ -23,7 +23,8 @@ data = data %>%
   dplyr::filter(age >= 18 & ocu == 1 ) %>%
   dplyr::select(directorio, secuencia_p, orden, estrato1, sex, age, ocu,
                 oficio, orden, totalHoursWorked, formal, informal,
-                sizeFirm, regSalud, cotPension, maxEducLevel, relab, 
+                sizeFirm, regSalud, cotPension, maxEducLevel, relab,
+                
                 y_salary_m_hu, y_ingLab_m_ha, y_total_m_ha, 
                 
                 y_total_m, y_ingLab_m, ingtot, ingtotob, ingtotes, y_salary_m, 
@@ -115,11 +116,13 @@ data2 =  data2 %>%
                 totalHoursWorked, formal, informal, Tamaño_firma, 
                 Reg_salud, Cot_pension, Max_nivel_educacion, Grupo_etario, 
                 Formalidad, Ocupacion, año, fex_c, 
-                ingtot, ingtotob, y_salary_m, y_total_m, 
-                y_total_m_ha, y_total_m_ha_f, y_salary_m_hu, y_ingLab_m_ha) 
+                
+                ingtot, ingtotob, y_salary_m, y_ingLab_m, y_total_m, 
+                y_salary_m_hu,  y_ingLab_m_ha, y_total_m_ha, 
+                y_total_m_ha_f,) # esta es la variable que usaríamos 
 
 saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
-
+# bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 #------------------------------------------------------------------------------#
 # 2. Estadísticas descriptivas
 #------------------------------------------------------------------------------#
