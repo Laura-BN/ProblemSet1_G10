@@ -146,16 +146,16 @@ g1 = ggplot(data2, aes(x = y_total_m_ha)) +
                       alpha = 0.5, size = 0.5, adjust = 1.5)
 
 t1 = sum(data2$y_total_m_ha > 0)  
-sum(data2$y_total_m_ha >= 60000) / t1 * 100
+sum(data2$y_total_m_ha >= 59000) / t1 * 100
 sum(data2$y_total_m_ha > 500) / t1 * 100
 
 # Aplicar winsorización 
 
-lower_perc = quantile(data2$y_total_m_ha,  0.011)
-upper_perc = quantile(data2$y_total_m_ha,  0.999)
+lower_perc = quantile(data2$y_total_m_ha,  0.01)
+upper_perc = quantile(data2$y_total_m_ha,  0.998)
 
-lower_perc_ = quantile(data2$y_total_m,  0.011)
-upper_perc_ = quantile(data2$y_total_m,  0.999)
+lower_perc_ = quantile(data2$y_total_m, 0.01)
+upper_perc_ = quantile(data2$y_total_m, 0.998)
 
 data2$y_total_m_ha =  ifelse(data2$y_total_m_ha < lower_perc, lower_perc,
                       ifelse(data2$y_total_m_ha > upper_perc, upper_perc,
