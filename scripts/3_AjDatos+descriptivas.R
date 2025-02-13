@@ -198,14 +198,13 @@ saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 #------------------------------------------------------------------------------#
 
 table1 = data %>% 
-  dplyr::summarise(num_observaciones     = n(),
-                   num_observaciones_pob = sum(fex_c, na.rm = T)); table1
+  dplyr::summarise(num_observaciones     = n()); table1
 
 caracteristicas = list("ocu", "Mujer", "Estrato", "Formalidad", "Grupo_etario", 
                        "Reg_salud", "Cot_pension", 
                        "Tamaño_firma", "Max_nivel_educacion", "Ocupacion")
 
-variables = c("agrupacion", "categoria", "proporcion", "y_total_m_ha_f", "n", "n_1")
+variables = c("agrupacion", "categoria", "proporcion", "y_total_m_ha", "n")
 
 data_list = list()
 
@@ -215,11 +214,10 @@ table2 =  data2 %>%
           dplyr::group_by(!!sym(i)) %>% 
           
           dplyr::summarise(n   = n(),
-                           n_1  = sum(fex_c, na.rm = T),
-                           y_total_m_ha_f = sum(y_total_m_ha_f*fex_c, na.rm = T) / n_1) %>%  
+                           y_total_m_ha = sum(y_total_m_ha, na.rm = T) / n) %>%  
            dplyr::mutate(agrupacion  = i, 
-                         total = sum(n_1),
-                         proporcion = round((n_1/total)*100, 1)) %>%
+                         total = sum(n),
+                         proporcion = round((n/total)*100, 1)) %>%
            dplyr::rename(categoria = !!sym(i)) %>% 
            dplyr::filter(!is.na(categoria)) %>% 
            dplyr::select(all_of(variables)) 
