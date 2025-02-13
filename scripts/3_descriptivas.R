@@ -81,6 +81,7 @@ summary(data$y_salary_m_hu)
 summary(data$y_ingLab_m_ha) 
 summary(data$y_total_m_ha) # y_total_m_ha = income salaried + independents total - nominal hourly
 
+table(data$y_total_m_ha)
 #------------------------------------------------------------------------------#
 # 1.2 Missing values
 #------------------------------------------------------------------------------#
@@ -103,6 +104,7 @@ data2 = data %>%
         mutate(y_total_m_ha_f = ifelse(is.na(y_total_m_ha) == TRUE,
                              median(data$y_total_m_ha, na.rm = TRUE),
                              y_total_m_ha))
+
 median(data$y_total_m_ha, na.rm = TRUE)
 median(data2$y_total_m_ha, na.rm = TRUE)
 
