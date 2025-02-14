@@ -12,6 +12,7 @@ rm(list = ls())
 # Users: ejecutar segùn el usuario de cada una/o
 
 path_user = "H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub"
+path_user = "/Users/camilaortiz/Dropbox/PEG/BigData"
 
 path_main = "ProblemSet1_G10"
 path_gen = file.path(path_user, path_main)
