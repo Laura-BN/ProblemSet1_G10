@@ -22,11 +22,9 @@ table(data$orden)
 data = data %>% 
   dplyr::filter(age >= 18 & ocu == 1 ) %>%
   dplyr::select(directorio, secuencia_p, orden, estrato1, sex, age, ocu,
-                oficio, totalHoursWorked, formal, informal,
+                oficio, totalHoursWorked, formal, informal, p6426, 
                 sizeFirm, regSalud, cotPension, maxEducLevel, relab,
-                
-                y_salary_m_hu, y_ingLab_m_ha, y_total_m_ha, 
-                
+                hoursWorkUsual, y_salary_m_hu, y_ingLab_m_ha, y_total_m_ha, 
                 y_total_m, y_ingLab_m, ingtot, ingtotob, ingtotes, y_salary_m, 
                 fex_c) %>% 
     dplyr::mutate(año = 2018, 
@@ -38,10 +36,14 @@ data = data %>%
                               ifelse(age >= 45, "Cat_3", "NA"))), 
                 Formalidad =  ifelse(formal   == 1, "Formal", 
                               ifelse(informal == 1, "Informal", "NA")), 
-                Mujer       = ifelse(sex   == 0, "Hombre", 
-                              ifelse(sex == 1, "Mujer", "NA")),
+                Mujer      =  ifelse(sex == 0, 1, 
+                              ifelse(sex == 1, 0, NA)),
                 Estrato    =  estrato1, 
-                
+               
+              Experiencia  = p6426,
+              
+              Full_time    = ifelse(hoursWorkUsual >= 48, 1, 0),
+              
             Tamaño_firma   =  ifelse(sizeFirm == 1, "Autoempleado", 
                               ifelse(sizeFirm == 2, "2-5 trabajadores", 
                               ifelse(sizeFirm == 3, "6-10 trabajadores", 
@@ -184,7 +186,7 @@ data2 =  data2 %>%
          dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, 
                        totalHoursWorked, formal, informal, Tamaño_firma, 
                        Reg_salud, Cot_pension, Max_nivel_educacion, Grupo_etario, 
-                       Formalidad, Ocupacion, 
+                       Formalidad, Ocupacion, Experiencia, Full_time,
                        ingtot, ingtotob, y_salary_m, y_ingLab_m, 
                        y_salary_m_hu,  y_ingLab_m_ha, 
                        
