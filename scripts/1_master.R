@@ -13,6 +13,7 @@ rm(list = ls())
 
 path_user = "H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub"
 path_user = "/Users/camilaortiz/Dropbox/PEG/BigData"
+path_user = "G:/Mi unidad/Academia/Maestría MEcA/Big data y machine learning/Taller 1"
 
 path_main = "ProblemSet1_G10"
 path_gen = file.path(path_user, path_main)
@@ -25,6 +26,11 @@ view_path     = file.path(path_gen, "view")
 #-----------------------------------------------------------------------------//
 # 2. Paquetes ----
 #-----------------------------------------------------------------------------//
+
+# Instalar paqueta pacman.
+#install.packages("pacman")
+
+# Llamar librerías
 require(pacman)
 p_load(tidyverse, 
        rvest,
@@ -40,5 +46,6 @@ p_load(tidyverse,
        gridExtra, 
        survey) 
 
+Instalar paquete DescTools
 # install.packages("DescTools")
 # library(DescTools)
