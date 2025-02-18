@@ -47,6 +47,6 @@ p_load(tidyverse,
        gridExtra, 
        survey) 
 
-Instalar paquete DescTools
+#Instalar paquete DescTools
 # install.packages("DescTools")
 # library(DescTools)
