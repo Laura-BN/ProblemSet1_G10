@@ -38,7 +38,8 @@ p_load(tidyverse,
        broom, 
        xtable, 
        gridExtra, 
-       survey) 
+       survey,
+       VIM) 
 
 # install.packages("DescTools")
 # library(DescTools)
