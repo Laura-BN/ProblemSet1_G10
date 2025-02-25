@@ -22,7 +22,7 @@ table(data$orden)
 data = data %>% 
   dplyr::filter(age >= 18 & ocu == 1 ) %>%
   dplyr::select(directorio, secuencia_p, orden, estrato1, sex, age, ocu,
-                oficio, totalHoursWorked, formal, informal, p6426, 
+                oficio, totalHoursWorked, formal, informal, p6426,
                 sizeFirm, regSalud, cotPension, maxEducLevel, relab,
                 hoursWorkUsual, y_salary_m_hu, y_ingLab_m_ha, y_total_m_ha, 
                 y_total_m, y_ingLab_m, ingtot, ingtotob, ingtotes, y_salary_m, 
@@ -31,34 +31,41 @@ data = data %>%
                Grupo_etario = ifelse(age >= 18 & age <= 28, "Joven",
                               ifelse(age >= 29 & age < 50, "Adulto", 
                               ifelse(age >= 50, "Adulto_m", "NA"))),
-                   Edad_cat = ifelse(age >= 18 & age <= 24, "Cat_1",
+                Edad_cat = ifelse(age >= 18 & age <= 24, "Cat_1",
                               ifelse(age >= 24 & age < 45, "Cat_2", 
                               ifelse(age >= 45, "Cat_3", "NA"))), 
-                Formalidad =  ifelse(formal   == 1, "Formal", 
+                 Formalidad =  ifelse(formal   == 1, "Formal", 
                               ifelse(informal == 1, "Informal", "NA")), 
-                Mujer      =  ifelse(sex == 0, 1, 
+                 Mujer     =  ifelse(sex == 0, 1, 
                               ifelse(sex == 1, 0, NA)),
-                Estrato    =  estrato1, 
+                 Estrato    =  estrato1,
                
-              Experiencia  = p6426,
+                 Experiencia  = p6426,
               
               Full_time    = ifelse(hoursWorkUsual >= 48, 1, 0),
               
-            Tamaño_firma   =  ifelse(sizeFirm == 1, "Autoempleado", 
+            Tamaño_firma   =  factor(ifelse(sizeFirm == 1, "Autoempleado", 
                               ifelse(sizeFirm == 2, "2-5 trabajadores", 
                               ifelse(sizeFirm == 3, "6-10 trabajadores", 
                               ifelse(sizeFirm == 4, "11-50 trabajadores", 
-                              ifelse(sizeFirm == 5, "	>50 trabajadores", "NA"))))), 
+                              ifelse(sizeFirm == 5, "	>50 trabajadores", "NA")))))), 
                 
-       Max_nivel_educacion =  ifelse(maxEducLevel == 1, "Ninguna", 
+       Max_nivel_educacion =    ifelse(is.na(maxEducLevel), "Ninguna",
+                                ifelse(maxEducLevel == 1, "Ninguna", 
                                 ifelse(maxEducLevel == 2, "Preescolar", 
                                 ifelse(maxEducLevel == 3, "Primaria incompleta", 
                                 ifelse(maxEducLevel == 4, "Primaria completa", 
                                 ifelse(maxEducLevel == 5, "Secundaria incompleta", 
                                 ifelse(maxEducLevel == 6, "Secundaria completa", 
                                 ifelse(maxEducLevel == 7, "Terciaria", 
-                                ifelse(maxEducLevel == 9, "N/A", "NA")))))))),
+                                ifelse(maxEducLevel == 9, "N/A", "NA"))))))))),
        
+       Max_nivel_educacion2 = factor(ifelse(is.na(maxEducLevel) | maxEducLevel %in% c(1, 2, 3, 5), "Sin educación completa", 
+                               ifelse(maxEducLevel == 4, "Primaria completa", 
+                               ifelse(maxEducLevel == 6, "Secundaria completa", 
+                               ifelse(maxEducLevel == 7, "Terciaria completa", 
+                               ifelse(maxEducLevel == 9, "No aplica", NA)))))), 
+
                      Edu_cat =  ifelse(maxEducLevel == 1 | maxEducLevel == 3 | maxEducLevel == 5, "Ninguna", 
                                 ifelse(maxEducLevel == 2 | maxEducLevel == 4, "Preescolar y primaria", 
                                 ifelse(maxEducLevel == 6 | maxEducLevel == 7, "Secundaria y superior", 
@@ -181,16 +188,16 @@ vis_dat(data2)
 #------------------------------------------------------------------------------#
 # 1.5 Guardar base ----
 #------------------------------------------------------------------------------#
+data2$Mujer <- as.numeric(as.character(data$Mujer))
 
 data2 =  data2 %>% 
          dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, 
                        totalHoursWorked, formal, informal, Tamaño_firma, 
-                       Reg_salud, Cot_pension, Max_nivel_educacion, Grupo_etario, 
-                       Formalidad, Ocupacion, Experiencia, Full_time,
-                       ingtot, ingtotob, y_salary_m, y_ingLab_m, 
-                       y_salary_m_hu,  y_ingLab_m_ha, 
-                       
-                       y_total_m, y_total_m_ha) 
+                       Reg_salud, Cot_pension, Max_nivel_educacion, 
+                       Grupo_etario, Formalidad, Ocupacion, Max_nivel_educacion2,
+                       Experiencia, Full_time, Jefe_hogar_cat, 
+                       ingtot, ingtotob, y_salary_m,y_ingLab_m, y_salary_m_hu, 
+                       y_ingLab_m_ha, y_total_m, y_total_m_ha) 
 
 saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
