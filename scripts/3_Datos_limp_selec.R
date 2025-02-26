@@ -7,7 +7,7 @@ options(scipen = 999)
 #------------------------------------------------------------------------------#
 # 1. Ajuste variables
 #------------------------------------------------------------------------------#
-rm(data)
+
 data = readRDS(file.path(stores_path, "geih_2018.rds"))
 
 #------------------------------------------------------------------------------#
@@ -28,27 +28,26 @@ data = data %>%
                 y_total_m, y_ingLab_m, ingtot, ingtotob, ingtotes, y_salary_m, 
                 fex_c) %>% 
     dplyr::mutate(año = 2018, 
+                  
                Grupo_etario = ifelse(age >= 18 & age <= 28, "Joven",
                               ifelse(age >= 29 & age < 50, "Adulto", 
                               ifelse(age >= 50, "Adulto_m", "NA"))),
-                   Edad_cat = ifelse(age >= 18 & age <= 24, "Cat_1",
-                              ifelse(age >= 24 & age < 45, "Cat_2", 
-                              ifelse(age >= 45, "Cat_3", "NA"))), 
+                  
                 Formalidad =  ifelse(formal   == 1, "Formal", 
                               ifelse(informal == 1, "Informal", "NA")), 
+               
                 Mujer      =  ifelse(sex == 0, 1, 
                               ifelse(sex == 1, 0, NA)),
+               
                 Estrato    =  estrato1, 
                
               Experiencia  = p6426,
               
               Full_time    = ifelse(hoursWorkUsual >= 48, 1, 0),
               
-            Tamaño_firma   =  ifelse(sizeFirm == 1, "Autoempleado", 
-                              ifelse(sizeFirm == 2, "2-5 trabajadores", 
-                              ifelse(sizeFirm == 3, "6-10 trabajadores", 
-                              ifelse(sizeFirm == 4, "11-50 trabajadores", 
-                              ifelse(sizeFirm == 5, "	>50 trabajadores", "NA"))))), 
+            Tamaño_firma   =  ifelse(sizeFirm == 1 | sizeFirm == 2 | sizeFirm == 3, "Micro", 
+                              ifelse(sizeFirm == 4, "Pequeña", 
+                              ifelse(sizeFirm == 5, "Mediana_grande", "NA"))), 
                 
        Max_nivel_educacion =  ifelse(maxEducLevel == 1, "Ninguna", 
                                 ifelse(maxEducLevel == 2, "Preescolar", 
@@ -74,22 +73,26 @@ data = data %>%
                                 ifelse(relab == 8, "Jornalero o peon", 
                                 ifelse(relab == 9, "Otro", "NA"))))))))),
        
-              Ocupacion_cat  =  ifelse(relab == 1 | relab == 2, "Obreros y empleados", 
-                                ifelse(relab == 3, "Empleados domésticos", 
-                                ifelse(relab == 4, "Trabajadores cuenta propia", 
-                                ifelse(relab == 5, "Patron o empleador", 
-                                ifelse(relab == 6 | relab == 7, "Ocupados sin remuneración", 
-                                ifelse(relab == 8, "Jornalero o peon", 
-                                ifelse(relab == 9, "Otro", "NA"))))))),
+              Ocupacion_cat  =  ifelse(relab == 1 | relab == 2, "Obreros_empleados", 
+                                ifelse(relab == 3, "Emp_domésticos", 
+                                ifelse(relab == 4, "Cuenta_propia", 
+                                ifelse(relab == 5, "Patron_empleador", 
+                                ifelse(relab == 6 | relab == 7, "Ocu_sin_remun", 
+                                ifelse(relab == 8, "Jornalero_peon", 
+                                ifelse(relab == 9, "Otro", "NA"))))))), 
        
               Jefe_hogar_cat = ifelse(orden == 1, "Jefe hogar", 
-                                ifelse(orden != 1, "No jefe hogar", "NA")),
+                               ifelse(orden != 1, "No jefe hogar", "NA")),
                 
                Reg_salud     =  ifelse(regSalud == 1, "R. Contributivo", 
                                 ifelse(regSalud == 2, "R. Especial", 
                                 ifelse(regSalud == 3, "R. Subsidiado", 
                                 ifelse(regSalud == 9, "N/A", "NA")))),
                 
+               Reg_salud_c     =  ifelse(regSalud == 1 | regSalud == 2, "R. Contributivo/Especial", 
+                                ifelse(regSalud == 3, "R. Subsidiado", 
+                                ifelse(regSalud == 9, "N/A", "NA"))),
+       
                Cot_pension   =  ifelse(cotPension == 1, "Cotiza pensión", 
                                 ifelse(cotPension == 2, "No cotiza pensión", 
                                 ifelse(cotPension == 3, "Pensionado", 
@@ -123,7 +126,7 @@ corrplot(M)
 
 data2 = data %>%
         dplyr::filter(!is.na(y_total_m) & !is.na(y_total_m_ha)) %>% 
-        dplyr::mutate(across(c(estrato1, Edad_cat, Edu_cat, Ocupacion_cat, 
+        dplyr::mutate(across(c(estrato1, Grupo_etario, Edu_cat, Ocupacion_cat, 
                                Mujer, Jefe_hogar_cat), as.factor))
 
 
@@ -191,4 +194,4 @@ data2 =  data2 %>%
 
 # saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
-rm(data_, t1, lower_perc, upper_perc, lower_perc_, upper_perc_, g1, g2, M)
+rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)

@@ -14,11 +14,98 @@ source(file.path(scripts_path, "3_Datos_limp_selec.R"))
 # 1. Comparativa distribución ingresos ambas bases
 #------------------------------------------------------------------------------#
 
-summary(data$y_total_m)
-summary(data2$y_total_m)
+data = dummy_cols(data, select_columns = c("Grupo_etario", "Estrato", 
+                                           "Tamaño_firma", 
+                                           "Edu_cat", "Ocupacion_cat", 
+                                           "Jefe_hogar_cat", "Reg_salud_c", 
+                                           "cotPension"))
+   data$Tamaño_firma_Mediana_grande                                        
+data2 = dummy_cols(data2, select_columns = c("Grupo_etario", "Estrato",
+                                             "Tamaño_firma", 
+                                           "Edu_cat", "Ocupacion_cat", 
+                                           "Jefe_hogar_cat", "Reg_salud_c", 
+                                           "cotPension"))
 
-summary(data$y_total_m_ha)
-summary(data2$y_total_m_ha)
+
+results_table <- data.frame(Variable = character(), 
+                            Prop_data1 = numeric(), 
+                            Prop_data2 = numeric(), 
+                            Dif = numeric(),
+                            p_value = numeric(), 
+                            Significance = character(),
+                            stringsAsFactors = FALSE)
+
+
+variables = list("formal", "informal",  
+              "Mujer", 
+              "Experiencia", 
+              "Full_time",
+              "Grupo_etario_Joven", "Grupo_etario_Adulto", "Grupo_etario_Adulto_m",
+              
+              "Estrato_1", "Estrato_2", "Estrato_3", "Estrato_4", "Estrato_5", "Estrato_6", 
+              
+              "Tamaño_firma_Micro", "Tamaño_firma_Pequeña", "Tamaño_firma_Mediana_grande",
+              
+              "Ocupacion_cat_Obreros_empleados", "Ocupacion_cat_Emp_domésticos",
+              "Ocupacion_cat_Cuenta_propia", "Ocupacion_cat_Patron_empleador", 
+              "Ocupacion_cat_Jornalero_peon", "Ocupacion_cat_Otro") 
+
+
+for (var in variables) {
+
+  n1 <- nrow(data)  # Total de observaciones en data
+  n2 <- nrow(data2) # Total de observaciones en data2
+  
+  x1 <- sum(data[[var]] == 1, na.rm = TRUE)  # Mujeres en data
+  x2 <- sum(data2[[var]] == 1, na.rm = TRUE) # Mujeres en data2
+  
+  test = prop.test(x = c(x1, x2), n = c(n1, n2), alternative = "two.sided", correct = FALSE)
+  
+  # test = t.test(x = c(x1, x2), alternative = "two.sided", correct = T)
+
+  significance = ifelse(test$p.value < 0.05, "***", "")
+  
+    results_table = rbind(results_table, data.frame(
+    Variable = var,
+    Prop_data1 = (x1 /n1)*100, 
+    Prop_data2 = (x2/n2)*100, 
+    Dif =  ((x1 /n1)*100) - ((x2/n2)*100),
+    p_value = test$p.value, 
+    Significance = significance
+  ))
+    
+}
+
+results_table
+
+ggplot(results_table, aes(x = Variable, y = Dif, fill = Significance)) + 
+  geom_bar(stat = "identity", color = "black", position = "dodge") +
+  labs(
+    title = "Diferencia de proporciones entre muestras con y sin NAs en ingreso",
+    x = "Variable",
+    y = "Diferencia de proporciones (p.p.)",
+    fill = "Significancia"
+  ) +
+  theme_minimal() +
+  theme(
+    axis.text.x = element_text(angle = 90, hjust = 1),  
+    plot.title = element_text(hjust = 0.5),
+    legend.position = "top"  
+  ) 
+
+# Diferencia de medias continua 
+
+x1 = mean(data$y_total_m_ha, na.rm = TRUE)  # Media de data
+x2 = mean(data2$y_total_m_ha, na.rm = TRUE) # Media de data2
+
+# Realizar la prueba t para comparar las medias de las dos muestras
+
+t.test(data$y_total_m_ha, data2$y_total_m_ha, 
+       alternative = "two.sided", conf.level = 0.95)
+
+
+
+
 
 #------------------------------------------------------------------------------#
 # 2. Estadísticas descriptivas ----

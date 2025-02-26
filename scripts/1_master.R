@@ -66,7 +66,8 @@ p_load(tidyverse,
        xtable, 
        gridExtra, 
        survey,
-       VIM) 
+       VIM, 
+       fastDummies) 
 
 #Instalar paquete DescTools
 # install.packages("DescTools")
