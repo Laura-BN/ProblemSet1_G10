@@ -138,41 +138,39 @@ summary(data2$y_total_m)
 
 g1 = ggplot(data2, aes(x = y_total_m_ha)) +
      geom_density(aes(y = ..density.. * 100), color = "black", fill = "gray", 
-                      alpha = 0.5, size = 0.5, adjust = 1.5)
+                      alpha = 0.5, size = 0.5, adjust = 1.5) + 
+     ggtitle("Antes de aplicar Windsorization") +
+     theme_minimal() 
 
 t1 = sum(data2$y_total_m_ha > 0)  
 sum(data2$y_total_m_ha >= 59000) / t1 * 100
-
-
 sum(data2$y_total_m_ha < 700) / t1 * 100
 
 # Aplicar winsorización 
 
-lower_perc = quantile(data2$y_total_m_ha,  0.01)
-upper_perc = quantile(data2$y_total_m_ha,  0.99)
-
-sum(data2$y_total_m_ha < lower_perc, na.rm = TRUE)
-sum(data2$y_total_m_ha > upper_perc, na.rm = TRUE)
-
-
-lower_perc_ = quantile(data2$y_total_m, 0.01)
+upper_perc  = quantile(data2$y_total_m_ha, 0.99)
 upper_perc_ = quantile(data2$y_total_m, 0.99)
 
-data2$y_total_m_ha =  ifelse(data2$y_total_m_ha < lower_perc, lower_perc,
-                      ifelse(data2$y_total_m_ha > upper_perc, upper_perc,
-                             data2$y_total_m_ha))
+sum(data2$y_total_m_ha > upper_perc,  na.rm = TRUE) # observaciones reemplazadas
+sum(data2$y_total_m    > upper_perc_, na.rm = TRUE)
+
+data2$y_total_m_ha =  ifelse(data2$y_total_m_ha > upper_perc, upper_perc,
+                                  data2$y_total_m_ha)
        
-data2$y_total_m =  ifelse(data2$y_total_m < lower_perc_, lower_perc_,
-                      ifelse(data2$y_total_m > upper_perc_, upper_perc_,
-                             data2$y_total_m))      
+data2$y_total_m =  ifelse(data2$y_total_m > upper_perc_, upper_perc_,
+                         data2$y_total_m)      
 
 g2 = ggplot(data2, aes(x = y_total_m_ha)) +
      geom_density(aes(y = ..density.. * 100), color = "black", fill = "gray", 
-                      alpha = 0.5, size = 0.5, adjust = 1.5)
+                      alpha = 0.5, size = 0.5, adjust = 1.5)  + 
+  ggtitle("Después de aplicar Windsorization") +
+  theme_minimal() 
 
 grid.arrange(g1, g2, ncol = 2)
 
+summary(data$y_total_m_ha) # Antes windsor
 summary(data2$y_total_m_ha)
+summary(data$y_total_m)    # Antes windsor
 summary(data2$y_total_m)
 
 vis_dat(data2) 
@@ -191,5 +189,6 @@ data2 =  data2 %>%
                        
                        y_total_m, y_total_m_ha) 
 
-saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
+# saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
+rm(data_, t1, lower_perc, upper_perc, lower_perc_, upper_perc_, g1, g2, M)

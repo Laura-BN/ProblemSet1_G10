@@ -7,14 +7,34 @@
 rm(list = ls())
 
 #-----------------------------------------------------------------------------//
-# 1. Ruta de los archivos ----
+# 1. Usuarios ----
 #-----------------------------------------------------------------------------//
 
-# Users: ejecutar segùn el usuario de cada una/o
+paths = c(
+  "H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub",
+  "/Users/camilaortiz/Dropbox/PEG/BigData",
+  "G:/Mi unidad/Academia/Maestría MEcA/Big data y machine learning/Taller 1"
+)
 
-path_user = "H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub"
-path_user = "/Users/camilaortiz/Dropbox/PEG/BigData"
-path_user = "G:/Mi unidad/Academia/Maestría MEcA/Big data y machine learning/Taller 1"
+# Iterar sobre las rutas y seleccionar la primera que exista
+path_user = NULL
+for (path in paths) {
+  if (dir.exists(path)) {
+    path_user <- path
+    break 
+  }
+}
+
+# Ruta seleccionada
+if (!is.null(path_user)) {
+  print(paste("Ruta seleccionada:", path_user))
+} else {
+  print("Ninguno de las rutas es accesible.")
+}
+
+#-----------------------------------------------------------------------------//
+# 2. Ruta de los archivos ----
+#-----------------------------------------------------------------------------//
 
 path_main = "ProblemSet1_G10"
 path_gen = file.path(path_user, path_main)
@@ -25,7 +45,7 @@ stores_path   = file.path(path_gen, "stores")
 view_path     = file.path(path_gen, "view")
 
 #-----------------------------------------------------------------------------//
-# 2. Paquetes ----
+# 3. Paquetes ----
 #-----------------------------------------------------------------------------//
 
 # Instalar paqueta pacman.
