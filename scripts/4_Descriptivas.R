@@ -94,18 +94,10 @@ ggplot(results_table, aes(x = Variable, y = Dif, fill = Significance)) +
     legend.position = "top"  
   ) 
 
-# Diferencia de medias continua 
+# Diferencia de medias continua: ingreso
 
 t.test(data$y_total_m_ha, data2$y_total_m_ha, 
        alternative = "two.sided", conf.level = 0.95)
-
-
-# Realizando la prueba t entre las variables dicotómicas 'Mujer' de ambos datasets
-test1 <- t.test(data$Mujer, data2$Mujer, alternative = "two.sided", correct = TRUE)
-
-# Mostrando los resultados de la prueba
-print(test1)
-
 
 
 #------------------------------------------------------------------------------#
