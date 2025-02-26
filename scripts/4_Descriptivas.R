@@ -95,11 +95,6 @@ ggplot(results_table, aes(x = Variable, y = Dif, fill = Significance)) +
 
 # Diferencia de medias continua 
 
-x1 = mean(data$y_total_m_ha, na.rm = TRUE)  # Media de data
-x2 = mean(data2$y_total_m_ha, na.rm = TRUE) # Media de data2
-
-# Realizar la prueba t para comparar las medias de las dos muestras
-
 t.test(data$y_total_m_ha, data2$y_total_m_ha, 
        alternative = "two.sided", conf.level = 0.95)
 
