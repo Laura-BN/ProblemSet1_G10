@@ -26,7 +26,6 @@ data2 = dummy_cols(data2, select_columns = c("Grupo_etario", "Estrato",
                                            "Jefe_hogar_cat", "Reg_salud_c", 
                                            "cotPension"))
 
-
 results_table <- data.frame(Variable = character(), 
                             Prop_data1 = numeric(), 
                             Prop_data2 = numeric(), 
@@ -78,6 +77,8 @@ for (var in variables) {
 
 results_table
 
+# Plot 
+
 ggplot(results_table, aes(x = Variable, y = Dif, fill = Significance)) + 
   geom_bar(stat = "identity", color = "black", position = "dodge") +
   labs(
@@ -97,10 +98,6 @@ ggplot(results_table, aes(x = Variable, y = Dif, fill = Significance)) +
 
 t.test(data$y_total_m_ha, data2$y_total_m_ha, 
        alternative = "two.sided", conf.level = 0.95)
-
-
-
-
 
 #------------------------------------------------------------------------------#
 # 2. Estadísticas descriptivas ----

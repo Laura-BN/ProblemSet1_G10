@@ -190,8 +190,13 @@ data2 =  data2 %>%
                        ingtot, ingtotob, y_salary_m, y_ingLab_m, 
                        y_salary_m_hu,  y_ingLab_m_ha, 
                        
-                       y_total_m, y_total_m_ha) 
+                       y_total_m, y_total_m_ha, 
 
+                       Reg_salud_c, cotPension, Edu_cat, Ocupacion_cat, # para la diferencia de medias
+                       Jefe_hogar_cat, Full_time) 
+
+
+                
 # saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)
