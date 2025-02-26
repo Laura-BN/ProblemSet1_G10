@@ -52,15 +52,15 @@ variables = list("formal", "informal",
 
 for (var in variables) {
 
-  n1 <- nrow(data)  # Total de observaciones en data
-  n2 <- nrow(data2) # Total de observaciones en data2
+  n1 = nrow(data)  # Total de observaciones en data
+  n2 = nrow(data2) # Total de observaciones en data2
   
-  x1 <- sum(data[[var]] == 1, na.rm = TRUE)  # Mujeres en data
-  x2 <- sum(data2[[var]] == 1, na.rm = TRUE) # Mujeres en data2
+  x1 = sum(data[[var]] == 1, na.rm = TRUE)  # Mujeres en data
+  x2 = sum(data2[[var]] == 1, na.rm = TRUE) # Mujeres en data2
   
-  test = prop.test(x = c(x1, x2), n = c(n1, n2), alternative = "two.sided", correct = FALSE)
+  test = prop.test(x = c(x1, x2), n = c(n1, n2), alternative = "two.sided", correct = T)
   
-  # test = t.test(x = c(x1, x2), alternative = "two.sided", correct = T)
+  # test = t.test(x1, x2, alternative = "two.sided", correct = T)
 
   significance = ifelse(test$p.value < 0.05, "***", "")
   
@@ -98,6 +98,15 @@ ggplot(results_table, aes(x = Variable, y = Dif, fill = Significance)) +
 
 t.test(data$y_total_m_ha, data2$y_total_m_ha, 
        alternative = "two.sided", conf.level = 0.95)
+
+
+# Realizando la prueba t entre las variables dicotómicas 'Mujer' de ambos datasets
+test1 <- t.test(data$Mujer, data2$Mujer, alternative = "two.sided", correct = TRUE)
+
+# Mostrando los resultados de la prueba
+print(test1)
+
+
 
 #------------------------------------------------------------------------------#
 # 2. Estadísticas descriptivas ----
