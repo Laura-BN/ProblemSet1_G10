@@ -22,3 +22,4 @@ geih_2018 <- bind_rows(geih_list)
 saveRDS(geih_2018, file.path(stores_path, "geih_2018.rds"))
 
 
+ 
