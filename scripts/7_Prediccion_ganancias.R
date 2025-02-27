@@ -5,8 +5,6 @@ options(scipen = 999)
 source(file.path(scripts_path, "1_master.R"))
 data = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 
-log_y_total_m
-log_y_total_m_ha
 #------------------------------------------------------------------------------#
 # a. Divida la muestra en dos ----
 # una muestra de entrenamiento (70 \%) y una muestra de prueba (30 \%).
@@ -16,22 +14,18 @@ log_y_total_m_ha
 
 set.seed(10101) 
 
-inTrain = caret::createDataPartition(y = data$y_total_m_ha, # the outcome data are needed
-                                     p = .70,               # data training
+inTrain = caret::createDataPartition(y = data$log_y_total_m_ha, # the outcome data are needed
+                                     p = .70,                   # data training
                                      list = FALSE)
 
 training = data %>% filter(row_number() %in% inTrain)
 testing  = data %>% filter(!row_number() %in% inTrain)
-
+?createDataPartition
 #------------------------------------------------------------------------------#
 # b. Informe y compare el rendimiento predictivo en términos del RMSE ----
 # de todas las especificaciones anteriores con al menos cinco (5) 
 # especificaciones adicionales que exploren las no linealidades y la complejidad.
 #------------------------------------------------------------------------------#
-
-# MODELOS
-
-# ModelO 1 (punto 3):
 
 model1_pt3 <- lm(log_y_total_m ~ age, data = data_pt3)
 
@@ -39,6 +33,9 @@ model2_pt3 <- lm(log_y_total_m ~ age + I(age^2), data = data_pt3)
 
 
 
+# MODELOS
+
+# ModelO 1 (punto 3):
 
 
 

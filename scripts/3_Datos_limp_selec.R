@@ -41,7 +41,7 @@ data = data %>%
                
                 Estrato    =  estrato1, 
                
-              Estab_emple_act  = p6426,
+              Experiencia_emp_act  = p6426,
               
               Full_time    = ifelse(hoursWorkUsual >= 48, 1, 0),
               
@@ -159,7 +159,7 @@ data2 =  data2 %>%
                        totalHoursWorked, formal, informal, Tamaño_firma, 
                        Reg_salud, Cot_pension, Max_nivel_educacion, Jefe_hogar,
                        Max_nivel_educacion2, Grupo_etario, cuentaPropia,
-                       Formalidad, Ocupacion, Estab_emple_act, Full_time,
+                       Formalidad, Ocupacion, Experiencia_emp_act, Full_time,
                        ingtot, ingtotob, y_salary_m, y_ingLab_m, 
                        y_salary_m_hu,  y_ingLab_m_ha, 
                        
