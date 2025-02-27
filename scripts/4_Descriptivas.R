@@ -14,6 +14,18 @@ source(file.path(scripts_path, "3_Datos_limp_selec.R"))
 # 1. Gráficas de valores extremos en ingreso ----
 #------------------------------------------------------------------------------#
 
+#------------------------------------------------------------------------------#
+# 1.1 Gráficas de valores extremos en ingreso ----
+#------------------------------------------------------------------------------#
+upper_perc_m  = quantile(data2$y_total_m, 0.99)
+lower_perc_m  = quantile(data2$y_total_m, 0.01)
+
+upper_perc_m_log = quantile(log(data2$y_total_m), 0.99)
+lower_perc_m_log = quantile(log(data2$y_total_m), 0.01)
+
+sum(data2$y_total_m > upper_perc_m_log,  na.rm = TRUE) 
+sum(data2$y_total_m < lower_perc_m_log,  na.rm = TRUE)
+
 b_1 = ggplot(data = data, 
       mapping = aes(y = y_total_m/1000000, x="")) +
       theme_bw() +
@@ -21,42 +33,59 @@ b_1 = ggplot(data = data,
       ggtitle("")+
       ylab("Ingresos mensuales (millones de pesos)")+
       xlab("") +
-      geom_hline(yintercept = upper_perc_m/1000000, linetype="solid", color="#00EEEE",size=0.7) 
+      geom_hline(yintercept = upper_perc_m/1000000, linetype="solid", color="#00EEEE",size=0.7) +
+      geom_hline(yintercept = lower_perc_m/1000000, linetype="solid", color="#00EEEE",size=0.7)  
 
 b_2 = ggplot(data = data2, 
-      mapping = aes(y = y_total_m/1000000, x="")) +
+      mapping = aes(y = log(y_total_m), x="")) +
       theme_bw() +
       geom_boxplot()  +
       ggtitle("")+
-      ylab("Ingresos mensuales (millones de pesos)")+
+      ylab("Ingresos mensuales (log)")+
       xlab("") +
-      geom_hline(yintercept = upper_perc_m/1000000, linetype="solid", color="#00EEEE",size=0.7) 
+      geom_hline(yintercept = upper_perc_m_log, linetype="solid", color="#00EEEE",size=0.7) +
+      geom_hline(yintercept = lower_perc_m_log, linetype="solid", color="#00EEEE",size=0.7) 
 
 box_plot_m = grid.arrange(b_1, b_2, ncol = 2, 
-             top = textGrob("Box-plot ingresos mensuales (millones de pesos)",
+             top = textGrob("Box-plot ingresos mensuales (log y millones de pesos)",
                             gp = gpar(fontsize = 14)))
+
+#------------------------------------------------------------------------------#
+# 1.2 Gráficas de valores extremos en ingreso por hora ----
+#------------------------------------------------------------------------------#
+
+upper_perc_ha  = quantile(data2$y_total_m_ha, 0.99)
+lower_perc_ha  = quantile(data2$y_total_m_ha, 0.01)
+
+upper_perc_ha_log = quantile(log(data2$y_total_m_ha), 0.99)
+lower_perc_ha_log = quantile(log(data2$y_total_m_ha), 0.01)
+
+sum(data2$y_total_m_ha > upper_perc_ha,  na.rm = TRUE) # observaciones reemplazadas
+sum(data2$y_total_m_ha < lower_perc_ha,  na.rm = TRUE) # observaciones reemplazadas
 
 b_1_h = ggplot(data = data, 
-        mapping = aes(y = y_total_m_ha/1000, x="")) +
-        theme_bw() +
-        geom_boxplot()  +
-        ggtitle("")+
-        ylab("Ingresos por hora (miles de pesos)")+
-        xlab("") +
-        geom_hline(yintercept = upper_perc_ha/1000, linetype="solid", color="#00EEEE",size=0.7) 
-
-b_2_h = ggplot(data = data2, 
                mapping = aes(y = y_total_m_ha/1000, x="")) +
-        theme_bw() +
-        geom_boxplot()  +
-        ggtitle("")+
-        ylab("Ingresos por hora (miles de pesos)")+
-        xlab("") +
-        geom_hline(yintercept = upper_perc_ha/1000, linetype="solid", color="#00EEEE",size=0.7) 
+  theme_bw() +
+  geom_boxplot()  +
+  ggtitle("")+
+  ylab("Ingresos por hora (miles de pesos)")+
+  xlab("") +
+  geom_hline(yintercept = upper_perc_ha/1000, linetype="solid", color="#00EEEE",size=0.7) +
+  geom_hline(yintercept = lower_perc_ha/1000, linetype="solid", color="#00EEEE",size=0.7) 
+
+b_2_h = ggplot(data = data, 
+               mapping = aes(y = log(y_total_m_ha), x="")) +
+  theme_bw() +
+  geom_boxplot()  +
+  ggtitle("")+
+  ylab("Ingresos mensuales (log)")+
+  xlab("") +
+  geom_hline(yintercept = upper_perc_ha_log, linetype="solid", color="#00EEEE",size=0.7) +
+  geom_hline(yintercept = lower_perc_ha_log, linetype="solid", color="#00EEEE",size=0.7) 
 
 box_plot_h = grid.arrange(b_1_h, b_2_h, ncol = 2, 
-             top = textGrob("Box-plot ingresos por hora (miles de pesos)",
-                            gp = gpar(fontsize = 14)))
+             top = textGrob("Box-plot ingresos por hora (log y miles de pesos)",
+             gp = gpar(fontsize = 14)))
 
 # Guardar gráficos 
 
@@ -66,8 +95,14 @@ ggsave(file.path(paste0(view_path, "/box_plot_m.png")),
 ggsave(file.path(paste0(view_path, "/box_plot_h.png")), 
        plot = box_plot_h, width = 10, height = 6, dpi = 300)
 
+#------------------------------------------------------------------------------#
+data_p = data2 %>% select(y_total_m_ha, y_total_m) %>% 
+  dplyr::filter(y_total_m_ha <= lower_perc_ha & y_total_m <= lower_perc_m)
 
-# ANTES DE DEJAR ESTO VER EL PLOT DE INGRESOS EN NIVEL Y LOGARITMO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+summary(data_p$y_total_m_ha,  na.rm = TRUE) # observaciones reemplazadas
+summary(data_p$y_total_m, na.rm = TRUE)
+#------------------------------------------------------------------------------#
+
 
 #------------------------------------------------------------------------------#
 # 2. Comparativa distribución ingresos ambas bases----
@@ -94,7 +129,9 @@ data2 = dummy_cols(data2, select_columns = c("Grupo_etario", "Estrato",
 
 diff_means_table = data.frame(Variable = character(), 
                             Mean_data1 = numeric(), 
+                            se_1 = numeric(), 
                             Mean_data2 = numeric(), 
+                            se_2 = numeric(), 
                             Dif = numeric(),
                             p_value = numeric(), 
                             Significance = character(),
@@ -134,13 +171,16 @@ for (var in variables) {
   diff_means_table = rbind(diff_means_table, data.frame(
     Variable = var,
     Mean_data1 = (x1 /n1)*100, 
+    se_1 = sqrt(((x1 /n1)*(1-(x1 /n1)))/n1) * 100,
     Mean_data2 = (x2/n2)*100, 
+    se_2 = sqrt(((x2 /n2)*(1-(x2 /n2)))/n2) * 100,
     Dif =  ((x1 /n1)*100) - ((x2/n2)*100),
     p_value = test$p.value, 
     Significance = significance
   ))
     
 }
+
 
 # Plot 
 plot_dif_p = ggplot(diff_means_table, aes(x = Variable, y = Dif, fill = Significance)) + 
@@ -179,34 +219,14 @@ for (var in variables_2) {
   diff_means_table = rbind(diff_means_table, data.frame(
     Variable = var,
     Mean_data1 = x1, 
+    se_1 = sd(data[[var]], na.rm = TRUE) / sqrt(sum(!is.na(data[[var]]))),
     Mean_data2 = x2, 
+    se_2 = ( sd(data2[[var]], na.rm = TRUE) / sqrt(sum(!is.na(data2[[var]]))) ),
     Dif =  x1 - x2,
     p_value = test$p.value, 
     Significance = significance
   ))
 }
-
-# Plot 
-
-plot_dif_ing = ggplot(diff_means_table[24:25, ], 
-          aes(x = Variable, y = (Dif/Mean_data1)*100, fill = Significance)) + 
-  geom_bar(stat = "identity", color = "black", position = "dodge") +
-  labs(
-    title = "Diferencia de medias % entre muestras con y sin NAs",
-    x = "Variable",
-    y = "Diferencia de medias (%)",
-    fill = "Significancia"
-  ) +
-  theme_minimal() +
-  theme(
-    axis.text.x = element_text(angle = 0, hjust = 1),  
-    plot.title = element_text(hjust = 0.5),
-    legend.position = "top", 
-    panel.grid = element_blank()
-  ) +
-  scale_fill_manual(values = c("***" = "#00EEEE"))  
-
-plot_dif_ing
 
 #------------------------------------------------------------------------------#
 # 3. Guardar tablas y gráficas diferencia de medias ----
@@ -215,8 +235,7 @@ plot_dif_ing
 ggsave(file.path(paste0(view_path, "/plot_dif_p.png")), 
        plot = plot_dif_p, width = 10, height = 6, dpi = 300)
 
-ggsave(file.path(paste0(view_path, "/plot_dif_ing.png")), 
-       plot = plot_dif_ing, width = 10, height = 6, dpi = 300)
+# ggsave(file.path(paste0(view_path, "/plot_dif_ing.png")), plot = plot_dif_ing, width = 10, height = 6, dpi = 300)
 
 diff_means = xtable(diff_means_table, digits = 1)
 print(diff_means, type = "latex", include.rownames = FALSE)
@@ -226,70 +245,3 @@ diff_means_table
 
 table1 = data %>% dplyr::summarise(num_observaciones  = n()); table1
 table2 = data2 %>% dplyr::summarise(num_observaciones = n()); table2
-
-
-
-
-
-
-
-
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-#------------------------------------------------------------------------------#
-# 1.4 Outliers (revisión) ----
-#------------------------------------------------------------------------------#
-
-g1 = ggplot(data2, aes(x = y_total_m_ha)) +
-  geom_density(aes(y = ..density.. * 100), color = "black", fill = "gray", 
-               alpha = 0.5, size = 0.5, adjust = 1.5) + 
-  ggtitle("Antes de aplicar Windsorization") +
-  theme_minimal() 
-
-t1 = sum(data2$y_total_m_ha > 0)  
-sum(data2$y_total_m_ha >= 59000) / t1 * 100
-sum(data2$y_total_m_ha < 700) / t1 * 100
-
-# Aplicar winsorización 
-
-upper_perc_ha  = quantile(data2$y_total_m_ha, 0.99)
-upper_perc_m = quantile(data2$y_total_m, 0.99)
-
-#------------------------------------------------------------------------------#
-
-data_p = data2 %>% select(y_total_m_ha, y_total_m) %>% 
-  dplyr::filter(y_total_m_ha > upper_perc_ha & y_total_m > upper_perc_ha)
-
-summary(data_p$y_total_m_ha,  na.rm = TRUE) # observaciones reemplazadas
-summary(data_p$y_total_m, na.rm = TRUE)
-
-#------------------------------------------------------------------------------#
-
-data_ext = data2
-
-sum(data_ext$y_total_m_ha > upper_perc_ha,  na.rm = TRUE) # observaciones reemplazadas
-sum(data_ext$y_total_m    > upper_perc_m, na.rm = TRUE)
-
-data_ext$y_total_m_ha =  ifelse(data_ext$y_total_m_ha > upper_perc_ha, upper_perc_ha,
-                                data_ext$y_total_m_ha)
-
-data_ext$y_total_m =  ifelse(data_ext$y_total_m > upper_perc_m, upper_perc_m,
-                             data_ext$y_total_m)      
-
-g2 = ggplot(data_ext, aes(x = y_total_m_ha)) +
-  geom_density(aes(y = ..density.. * 100), color = "black", fill = "gray", 
-               alpha = 0.5, size = 0.5, adjust = 1.5)  + 
-  ggtitle("Después de aplicar Windsorization") +
-  theme_minimal() 
-
-grid.arrange(g1, g2, ncol = 2)
-
-summary(data$y_total_m_ha) # Antes windsor
-summary(data_ext$y_total_m_ha)
-summary(data$y_total_m)    # Antes windsor
-summary(data_ext$y_total_m)
