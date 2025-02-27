@@ -26,7 +26,12 @@ data = data %>%
                 sizeFirm, regSalud, cotPension, maxEducLevel, relab,
                 hoursWorkUsual, y_salary_m_hu, y_ingLab_m_ha, y_total_m_ha, 
                 y_total_m, y_ingLab_m, ingtot, ingtotob, ingtotes, y_salary_m, 
-                fex_c) %>% 
+                fex_c, secuencia_p, orden, sex, age, 
+                oficio, p6426, sizeFirm, regSalud, cotPension, maxEducLevel, relab,
+                hoursWorkUsual, ingtotes, 
+                fex_c, impa, impaes, isa, isaes,
+                y_gananciaIndep_m, y_gananciaNeta_m, y_gananciaNetaAgro_m, dominio,
+                clase, cuentaPropia) %>% 
     dplyr::mutate(año = 2018, 
                   
                Grupo_etario = ifelse(age >= 18 & age <= 28, "Joven",
@@ -125,12 +130,12 @@ summary(data$y_total_m) # y_total_m_ha = income salaried + independents total - 
 summary(data$y_total_m_ha) # y_total_m_ha = income salaried + independents total - nominal hourly
 summary(data$log_y_total_m) # log y_total_m_ha
 summary(data$log_y_total_m_ha) # log y_total_m_ha 
-
+ 
 #------------------------------------------------------------------------------#
 # 1.2 Ver missing values ----
 #------------------------------------------------------------------------------#
 
-vis_dat(data) 
+#vis_dat(data) 
 is.na(data$y_total_m_ha) %>% table()
 data_ = data %>% mutate_all(~ifelse(!is.na(.), 1, 0))
 data_ = data_ %>%  select(which(apply(data_, 2, sd) > 0))
@@ -174,8 +179,15 @@ data2 =  data2 %>%
                        log_y_total_m, log_y_total_m_ha, # variables de resultado en logaritmo
 
                        Reg_salud_c, cotPension, Edu_cat, Ocupacion_cat, # para la diferencia de medias
-                       Jefe_hogar_cat, Full_time) 
+                       Jefe_hogar_cat, Full_time,
+                       
+                       secuencia_p, orden, sex, age, estrato1,
+                       oficio, p6426, sizeFirm, regSalud, cotPension, maxEducLevel, relab,
+                       hoursWorkUsual, ingtotes, 
+                       fex_c, impa, impaes, isa, isaes,
+                       y_gananciaIndep_m, y_gananciaNeta_m, y_gananciaNetaAgro_m, dominio,
+                       clase, cuentaPropia) 
 
-# saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
+saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 #rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)

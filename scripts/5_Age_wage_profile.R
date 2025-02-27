@@ -3,8 +3,6 @@
 # Autores: Grupo 10
 ##########################################################
 
-
-
 options(scipen = 999)
 
 
@@ -20,15 +18,15 @@ p_load(rio, # import/export data
        stargazer, #model viz and descriptive statistics
        boot
       )   
-
+ 
 
 # Importar base de datos ----------------------------------
 
 rm(data)
-data <- readRDS(file.path(stores_path, "geih_2018.rds"))
-data <- as_tibble(data)
+data_VF <- readRDS(file.path(stores_path, "geih_2018_VF.rds"))
+data_VF <- as_tibble(data_VF)
 
-data_pt3 <- data %>% 
+data_pt3 <- data_VF %>% 
   dplyr::select(directorio, secuencia_p, orden, estrato1, sex, age, ocu,
                 oficio, totalHoursWorked, formal, informal, p6426, 
                 sizeFirm, regSalud, cotPension, maxEducLevel, relab,
@@ -44,7 +42,7 @@ data_pt3 <- data %>%
 # Filtrar base para personas ocupadas mayores de 18 años y eliminar variables sin observaciones en y_total_m
 data_pt3 <- data_pt3 %>% 
             dplyr::filter(age >= 18 & ocu == 1 ) %>%
-            dplyr::filter(!is.na(y_total_m))
+            dplyr::filter(!is.na(y_total_m) | !is.na(y_total_m_ha))
 
 # Suponemos que las personas que no informan su nivel de educación es bajo
 data_pt3 <- data_pt3  %>%
@@ -54,35 +52,40 @@ data_pt3 <- data_pt3  %>%
 data_pt3 <- data_pt3 %>% filter(totalHoursWorked>0)
 
 # Explorar los datos
-des_vars <- c("y_total_m", "age")
+des_vars <- c("y_total_m_ha", "age")
 
 stargazer(as.data.frame(data_pt3[,des_vars]), type="text")
 
 # Transformar la variable de ingreso a logaritmo
-data_pt3$log_y_total_m <- log(data_pt3$y_total_m)
+data_pt3$logB_y_total_m_ha <- log(data_pt3$y_total_m_ha)
 
 
 # Visualización de los datos ----------------------------------
 
 a <- ggplot(data_pt3, aes(x = y_total_m)) +
     geom_histogram(bins = 50, fill = "darkblue") +
-    labs(x = "Total ingresos", y = "N° obs") +
+    labs(x = "Ingreso mensual", y = "N° obs") +
     theme_bw() 
 
-b <- ggplot(data_pt3, aes(x = age)) +
+b <- ggplot(data_pt3, aes(x = y_total_m_ha)) +
+  geom_histogram(bins = 50, fill = "darkblue") +
+  labs(x = "Ingreso por hora", y = "N° obs") +
+  theme_bw() 
+
+c <- ggplot(data_pt3, aes(x = age)) +
     geom_histogram(bins = 30, fill = "darkblue") +
     labs(x = "Edad", y = "N° obs") +
     theme_bw() 
 
-grid.arrange(a, b, ncol = 2)
+grid.arrange(a, b, c, ncol = 3)
 
 
 
 # Estimación del modelo base the Age-wage profile ----------------------------
 
-model1_pt3 <- lm(log_y_total_m ~ age, data = data_pt3)
+model1_pt3 <- lm(logB_y_total_m_ha ~ age, data = data_pt3)
 
-model2_pt3 <- lm(log_y_total_m ~ age + I(age^2), data = data_pt3)
+model2_pt3 <- lm(logB_y_total_m_ha ~ age + I(age^2), data = data_pt3)
 
 
 # Generar la tabla con los resultados de ambos modelos
@@ -106,7 +109,7 @@ predicted_log_w <- predict(model2_pt3, newdata = data.frame(age = age_range))
 
 # Graficar
 plot(age_range, exp(predicted_log_w), type = "l", 
-     xlab = "Edad", ylab = "Salario", 
+     xlab = "Edad", ylab = "Ingreso por hora trabajada", 
      main = "Perfil edad-salario estimado")
 
 
@@ -119,7 +122,7 @@ age_peak
 # Función para calcular la edad pico con la variable 'w' explícita
 age_peak_func <- function(data, indices) {
   d <- data[indices, ]
-  model_boot <- lm(d$log_y_total_m ~ d$age + I(d$age^2), data = d)
+  model_boot <- lm(d$logB_y_total_m_ha ~ d$age + I(d$age^2), data = d)
   return(-coef(model_boot)[2] / (2 * coef(model_boot)[3]))
 }
 
