@@ -22,7 +22,7 @@ table(data$orden)
 data = data %>% 
   dplyr::filter(age >= 18 & ocu == 1 ) %>%
   dplyr::select(directorio, secuencia_p, orden, estrato1, sex, age, ocu,
-                oficio, totalHoursWorked, formal, informal, p6426, 
+                oficio, totalHoursWorked, formal, informal, p6426, cuentaPropia,
                 sizeFirm, regSalud, cotPension, maxEducLevel, relab,
                 hoursWorkUsual, y_salary_m_hu, y_ingLab_m_ha, y_total_m_ha, 
                 y_total_m, y_ingLab_m, ingtot, ingtotob, ingtotes, y_salary_m, 
@@ -58,6 +58,12 @@ data = data %>%
                                 ifelse(maxEducLevel == 7, "Terciaria", 
                                 ifelse(maxEducLevel == 9, "N/A", "NA")))))))),
        
+       Max_nivel_educacion2 = ifelse(is.na(maxEducLevel) | maxEducLevel %in% c(1, 2, 3, 5), "Sin educación completa", 
+                               ifelse(maxEducLevel == 4, "Primaria completa", 
+                               ifelse(maxEducLevel == 6, "Secundaria completa", 
+                               ifelse(maxEducLevel == 7, "Terciaria completa", 
+                               ifelse(maxEducLevel == 9, "No aplica", NA))))),
+       
                      Edu_cat =  ifelse(maxEducLevel == 1 | maxEducLevel == 3 | maxEducLevel == 5, "Ninguna", 
                                 ifelse(maxEducLevel == 2 | maxEducLevel == 4, "Preescolar y primaria", 
                                 ifelse(maxEducLevel == 6 | maxEducLevel == 7, "Secundaria y superior", 
@@ -83,6 +89,8 @@ data = data %>%
        
               Jefe_hogar_cat = ifelse(orden == 1, "Jefe hogar", 
                                ifelse(orden != 1, "No jefe hogar", "NA")),
+       
+              Jefe_hogar     = ifelse(orden == 1, 1, 0),
                 
                Reg_salud     =  ifelse(regSalud == 1, "R. Contributivo", 
                                 ifelse(regSalud == 2, "R. Especial", 
@@ -127,8 +135,8 @@ corrplot(M)
 data2 = data %>%
         dplyr::filter(!is.na(y_total_m) & !is.na(y_total_m_ha)) %>% 
         dplyr::mutate(across(c(estrato1, Grupo_etario, Edu_cat, Ocupacion_cat, 
-                               Mujer, Jefe_hogar_cat), as.factor))
-
+                               Max_nivel_educacion, Max_nivel_educacion2,
+                               Tamaño_firma, Ocupacion, Jefe_hogar_cat), as.factor))
 
 summary(data$y_total_m_ha) # Antes eliminación
 summary(data2$y_total_m_ha)
@@ -142,7 +150,8 @@ summary(data2$y_total_m)
 data2 =  data2 %>% 
          dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, fex_c,
                        totalHoursWorked, formal, informal, Tamaño_firma, 
-                       Reg_salud, Cot_pension, Max_nivel_educacion, Grupo_etario, 
+                       Reg_salud, Cot_pension, Max_nivel_educacion, Jefe_hogar,
+                       Max_nivel_educacion2, Grupo_etario, cuentaPropia,
                        Formalidad, Ocupacion, Experiencia, Full_time,
                        ingtot, ingtotob, y_salary_m, y_ingLab_m, 
                        y_salary_m_hu,  y_ingLab_m_ha, 
@@ -152,6 +161,12 @@ data2 =  data2 %>%
                        Reg_salud_c, cotPension, Edu_cat, Ocupacion_cat, # para la diferencia de medias
                        Jefe_hogar_cat, Full_time) 
 
+<<<<<<< HEAD
 # saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
+=======
+
+                
+saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
+>>>>>>> 1fe4df9d38d7ce3c0a8f2e990db0e46555c9a61b
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 #rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)
