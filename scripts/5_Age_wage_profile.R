@@ -16,7 +16,8 @@ p_load(rio, # import/export data
        gridExtra, # arrange plots
        skimr, # summarize data 
        stargazer, #model viz and descriptive statistics
-       boot
+       boot,
+       xtable
       )   
  
 
@@ -128,8 +129,21 @@ age_peak_func <- function(data, indices) {
 
 # Ejecutar el bootstrap
 set.seed(10101)  # Fijar semilla para reproducibilidad
-bootstrap_results <- boot(data_pt3, age_peak_func, R = 1000)
+bootstrap_results <- boot(data_pt3, age_peak_func, R = 10000)
 
 # Ver el intervalo de confianza del 95%
-boot.ci(bootstrap_results, type = "bca")
+boot_ci <- boot.ci(bootstrap_results, type = "bca")
 
+# Extraer los resultados del intervalo de confianza
+lower <- boot_ci$bca[4]  # Límite inferior
+upper <- boot_ci$bca[5]  # Límite superior
+
+
+# Crear una tabla en LaTeX con xtable
+ci_table <- data.frame(
+  "Intervalo de Confianza" = c("Límite Inferior", "Límite Superior"),
+  "Valor" = c(lower, upper))
+
+
+# Imprimir la tabla en formato LaTeX
+print(xtable(ci_table, caption = "Intervalo de confianza (95%)"), type = "latex")
