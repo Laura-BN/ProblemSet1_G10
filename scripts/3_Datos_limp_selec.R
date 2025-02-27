@@ -163,7 +163,7 @@ summary(data2$y_total_m)
 data2 =  data2 %>% 
          dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, fex_c,
                        totalHoursWorked, formal, informal, Tamaño_firma, sizeFirm,
-                       sizeFirm_cat, 
+                       sizeFirm_cat, regSalud,
                        Reg_salud, Cot_pension, Max_nivel_educacion, Jefe_hogar,
                        Max_nivel_educacion2, Grupo_etario, cuentaPropia, 
                        Formalidad, Ocupacion, Experiencia_emp_act, Full_time,

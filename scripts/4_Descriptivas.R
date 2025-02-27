@@ -140,7 +140,7 @@ diff_means_table = data.frame(Variable = character(),
 
 variables = list("formal", "informal",  
               "Mujer", 
-              "Experiencia", 
+              "Experiencia_emp_act", 
               "Full_time",
               "Grupo_etario_Joven", "Grupo_etario_Adulto", "Grupo_etario_Adulto_m",
               
