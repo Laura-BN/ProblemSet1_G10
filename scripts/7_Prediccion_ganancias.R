@@ -311,6 +311,42 @@ for (var in variables_2) {
   ))
 }
 
+# Nota 3: los ingresos son significativamente mayores en los outliers
+
+#------------------------------------------------------------------------------#
+# c.4.2.1 Box plot ingresos testing y outliers ----
+#------------------------------------------------------------------------------#
+
+upper_perc_test  = quantile(testing$y_total_m, 0.99)
+lower_perc_test  = quantile(testing$y_total_m, 0.01)
+
+b_1 = ggplot(data = testing, 
+             mapping = aes(y = y_total_m/1000000, x="")) +
+  theme_bw() +
+  geom_boxplot()  +
+  ggtitle("Testing")+
+  ylab("Ingresos mensuales (millones de pesos)")+
+  xlab("") +
+  geom_hline(yintercept = upper_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7) +
+  geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
+
+upper_perc_out  = quantile(outliers$y_total_m, 0.99)
+lower_perc_out  = quantile(outliers$y_total_m, 0.01)
+
+b_2 = ggplot(data = outliers, 
+             mapping = aes(y = y_total_m/1000000, x="")) +
+  theme_bw() +
+  geom_boxplot()  +
+  ggtitle("Outliers")+
+  ylab("Ingresos mensuales (millones de pesos)")+
+  xlab("") +
+  geom_hline(yintercept = upper_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7) +
+  geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
+
+box_plot_m = grid.arrange(b_1, b_2, ncol = 2, 
+                          top = textGrob("Box-plot ingresos mensuales",
+                                         gp = gpar(fontsize = 14)))
+
 #------------------------------------------------------------------------------#
 # c.4.3 Tabla diferencia de medias testing y outliers ----
 #------------------------------------------------------------------------------#
@@ -319,7 +355,7 @@ diff_means_table
 diff_means = xtable(diff_means_table, digits = 1)
 print(diff_means, type = "latex", include.rownames = FALSE)
 
-table1 = testing %>% dplyr::summarise(num_observaciones  = n()); table1
+table1 = testing  %>% dplyr::summarise(num_observaciones = n()); table1
 table2 = outliers %>% dplyr::summarise(num_observaciones = n()); table2
 
 #stargazer(as.data.frame(outliers[, variables]), type = "text")
@@ -368,7 +404,6 @@ cat("\nLOOCV training completed in:", round(training_time, 2), "minutes\n")
 cat("Average time per fold:", round(training_time/n_obs, 4), "minutes\n")
 
 
-
 # normalito
 
 ctrl$verboseIter <- TRUE  # Enable progress printing
@@ -377,9 +412,6 @@ modelo1c <- train(form_1,
                   method = 'lm', 
                   trControl= ctrl)
 modelo1c
-
-
-
 
 head(modelo1c$pred)
 score1c<-RMSE(modelo1c$pred$pred, db$totalHoursWorked)
