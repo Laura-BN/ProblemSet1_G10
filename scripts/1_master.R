@@ -42,7 +42,7 @@ path_gen = file.path(path_user, path_main)
 document_path = file.path(path_gen, "document") 
 scripts_path  = file.path(path_gen, "scripts") 
 stores_path   = file.path(path_gen, "stores")
-view_path     = file.path(path_gen, "view")
+view_path     = file.path(path_gen, "views")
 
 #-----------------------------------------------------------------------------//
 # 3. Paquetes ----
@@ -67,7 +67,9 @@ p_load(tidyverse,
        gridExtra, 
        survey,
        VIM, 
-       fastDummies) 
+       fastDummies, 
+       xtable, 
+       broom) 
 
 #Instalar paquete DescTools
 # install.packages("DescTools")

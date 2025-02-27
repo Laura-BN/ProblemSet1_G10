@@ -136,54 +136,11 @@ summary(data$y_total_m)    # Antes eliminación
 summary(data2$y_total_m)
 
 #------------------------------------------------------------------------------#
-# 1.4 Outliers ----
-#------------------------------------------------------------------------------#
-
-g1 = ggplot(data2, aes(x = y_total_m_ha)) +
-     geom_density(aes(y = ..density.. * 100), color = "black", fill = "gray", 
-                      alpha = 0.5, size = 0.5, adjust = 1.5) + 
-     ggtitle("Antes de aplicar Windsorization") +
-     theme_minimal() 
-
-t1 = sum(data2$y_total_m_ha > 0)  
-sum(data2$y_total_m_ha >= 59000) / t1 * 100
-sum(data2$y_total_m_ha < 700) / t1 * 100
-
-# Aplicar winsorización 
-
-upper_perc  = quantile(data2$y_total_m_ha, 0.99)
-upper_perc_ = quantile(data2$y_total_m, 0.99)
-
-sum(data2$y_total_m_ha > upper_perc,  na.rm = TRUE) # observaciones reemplazadas
-sum(data2$y_total_m    > upper_perc_, na.rm = TRUE)
-
-data2$y_total_m_ha =  ifelse(data2$y_total_m_ha > upper_perc, upper_perc,
-                                  data2$y_total_m_ha)
-       
-data2$y_total_m =  ifelse(data2$y_total_m > upper_perc_, upper_perc_,
-                         data2$y_total_m)      
-
-g2 = ggplot(data2, aes(x = y_total_m_ha)) +
-     geom_density(aes(y = ..density.. * 100), color = "black", fill = "gray", 
-                      alpha = 0.5, size = 0.5, adjust = 1.5)  + 
-  ggtitle("Después de aplicar Windsorization") +
-  theme_minimal() 
-
-grid.arrange(g1, g2, ncol = 2)
-
-summary(data$y_total_m_ha) # Antes windsor
-summary(data2$y_total_m_ha)
-summary(data$y_total_m)    # Antes windsor
-summary(data2$y_total_m)
-
-vis_dat(data2) 
-
-#------------------------------------------------------------------------------#
 # 1.5 Guardar base ----
 #------------------------------------------------------------------------------#
 
 data2 =  data2 %>% 
-         dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, 
+         dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, fex_c,
                        totalHoursWorked, formal, informal, Tamaño_firma, 
                        Reg_salud, Cot_pension, Max_nivel_educacion, Grupo_etario, 
                        Formalidad, Ocupacion, Experiencia, Full_time,
@@ -195,8 +152,6 @@ data2 =  data2 %>%
                        Reg_salud_c, cotPension, Edu_cat, Ocupacion_cat, # para la diferencia de medias
                        Jefe_hogar_cat, Full_time) 
 
-
-                
 # saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
-rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)
+#rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)
