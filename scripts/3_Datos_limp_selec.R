@@ -90,7 +90,7 @@ data = data %>%
               Jefe_hogar_cat = ifelse(orden == 1, "Jefe hogar", 
                                ifelse(orden != 1, "No jefe hogar", "NA")),
        
-              Jefe_hogar     = ifelse(orden == 1, 1, 0),
+               Jefe_hogar    = ifelse(orden == 1, 1, 0),
                 
                Reg_salud     =  ifelse(regSalud == 1, "R. Contributivo", 
                                 ifelse(regSalud == 2, "R. Especial", 
@@ -104,7 +104,12 @@ data = data %>%
                Cot_pension   =  ifelse(cotPension == 1, "Cotiza pensión", 
                                 ifelse(cotPension == 2, "No cotiza pensión", 
                                 ifelse(cotPension == 3, "Pensionado", 
-                                ifelse(cotPension == 9, "N/A", "NA")))))
+                                ifelse(cotPension == 9, "N/A", "NA")))), 
+       
+              # Generar la variable de ingreso en log
+       
+              log_y_total_m_ha = log(y_total_m_ha), 
+              log_y_total_m    = log(y_total_m))
 
 summary(data$y_salary_m)
 summary(data$y_ingLab_m)
@@ -112,6 +117,8 @@ summary(data$y_salary_m_hu)
 summary(data$y_ingLab_m_ha) 
 summary(data$y_total_m) # y_total_m_ha = income salaried + independents total - nominal hourly
 summary(data$y_total_m_ha) # y_total_m_ha = income salaried + independents total - nominal hourly
+summary(data$log_y_total_m) # log y_total_m_ha
+summary(data$log_y_total_m_ha) # log y_total_m_ha 
 
 #------------------------------------------------------------------------------#
 # 1.2 Ver missing values ----
@@ -157,6 +164,7 @@ data2 =  data2 %>%
                        y_salary_m_hu,  y_ingLab_m_ha, 
                        
                        y_total_m, y_total_m_ha, 
+                       log_y_total_m, log_y_total_m_ha, # variables de resultado en logaritmo
 
                        Reg_salud_c, cotPension, Edu_cat, Ocupacion_cat, # para la diferencia de medias
                        Jefe_hogar_cat, Full_time) 

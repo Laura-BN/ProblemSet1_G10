@@ -4,24 +4,24 @@
 options(scipen = 999)
 source(file.path(scripts_path, "1_master.R"))
 data = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
+
+log_y_total_m
+log_y_total_m_ha
 #------------------------------------------------------------------------------#
 # a. Divida la muestra en dos ----
 # una muestra de entrenamiento (70 \%) y una muestra de prueba (30 \%).
 # (No olvide establecer una semilla para lograr reproducibilidad.
 # En R, por ejemplo, puede usar set.seed(10101), donde 10101 es la semilla).
 #------------------------------------------------------------------------------#
-set.seed(10101)
 
-sample = sample(c(TRUE, FALSE), nrow(data), replace = TRUE, prob = c(0.7, 0.3))
-head(sample)
+set.seed(10101) 
 
-sum(sample)/nrow(data)
+inTrain = caret::createDataPartition(y = data$y_total_m_ha, # the outcome data are needed
+                                     p = .70,               # data training
+                                     list = FALSE)
 
-
-train  = data[sample, ]  #train sample those that are TRUE in the sample index
-test   = data[!sample, ] #test sample those that are FALSE in the sample index
-dim(train)
-dim(test)
+training = data %>% filter(row_number() %in% inTrain)
+testing  = data %>% filter(!row_number() %in% inTrain)
 
 #------------------------------------------------------------------------------#
 # b. Informe y compare el rendimiento predictivo en términos del RMSE ----
@@ -29,29 +29,18 @@ dim(test)
 # especificaciones adicionales que exploren las no linealidades y la complejidad.
 #------------------------------------------------------------------------------#
 
-#------------------------------------------------------------------------------#
-
-# CON CAAAAARET : Validation Set Approach 
-
-set.seed(10101)  # Set set for replicability purposes 
-
-inTrain = createDataPartition(
-  y = db$totalHoursWorked,  ## the outcome data are needed
-  p = .80, ## The percentage of training data
-  list = FALSE
-)
-
-# Define test and training data sets:
-
-training <- db %>% 
-  filter(row_number() %in% inTrain)
-
-testing  <- db %>% 
-  filter(!row_number() %in% inTrain)
-
 # MODELOS
 
-# Model 1:
+# ModelO 1 (punto 3):
+
+model1_pt3 <- lm(log_y_total_m ~ age, data = data_pt3)
+
+model2_pt3 <- lm(log_y_total_m ~ age + I(age^2), data = data_pt3)
+
+
+
+
+
 
 form_1<- totalHoursWorked ~ log_ingtot + age  + gender 
 
