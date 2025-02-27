@@ -161,12 +161,6 @@ data2 =  data2 %>%
                        Reg_salud_c, cotPension, Edu_cat, Ocupacion_cat, # para la diferencia de medias
                        Jefe_hogar_cat, Full_time) 
 
-<<<<<<< HEAD
 # saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
-=======
-
-                
-saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
->>>>>>> 1fe4df9d38d7ce3c0a8f2e990db0e46555c9a61b
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 #rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)
