@@ -45,6 +45,12 @@ data = data %>%
               
               Full_time    = ifelse(hoursWorkUsual >= 48, 1, 0),
               
+              sizeFirm     = ifelse(sizeFirm == 1, "autoempleado",
+                             ifelse(sizeFirm == 2, "2-5 empl",
+                             ifelse(sizeFirm == 3, "6-10 empl", 
+                             ifelse(sizeFirm == 4, "11-50 empl", 
+                             ifelse(sizeFirm == 5, ">50 empl", "NA"))))), 
+              
             Tamaño_firma   =  ifelse(sizeFirm == 1 | sizeFirm == 2 | sizeFirm == 3, "Micro", 
                               ifelse(sizeFirm == 4, "Pequeña", 
                               ifelse(sizeFirm == 5, "Mediana_grande", "NA"))), 
@@ -156,9 +162,9 @@ summary(data2$y_total_m)
 
 data2 =  data2 %>% 
          dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, fex_c,
-                       totalHoursWorked, formal, informal, Tamaño_firma, 
+                       totalHoursWorked, formal, informal, Tamaño_firma, sizeFirm, 
                        Reg_salud, Cot_pension, Max_nivel_educacion, Jefe_hogar,
-                       Max_nivel_educacion2, Grupo_etario, cuentaPropia,
+                       Max_nivel_educacion2, Grupo_etario, cuentaPropia, 
                        Formalidad, Ocupacion, Experiencia_emp_act, Full_time,
                        ingtot, ingtotob, y_salary_m, y_ingLab_m, 
                        y_salary_m_hu,  y_ingLab_m_ha, 
