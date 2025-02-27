@@ -168,15 +168,15 @@ testing$errores = testing$log_y_total_m_ha - hat_log_y_total_m_ha  # Errores de 
 # c.2 Revisión de la distribución de los errores----
 #------------------------------------------------------------------------------#
 
-summary(errores)  
+summary(testing$errores)  
 
-hist(errores, breaks = 30, main = "Distribución de errores de predicción",
+hist(testing$errores, breaks = 30, main = "Distribución de errores de predicción",
      xlab = "Error", col = "white", border = "black")
 
 # Percentiles 5 % y 95 %
 
-upper_perc_e  = quantile(errores, 0.99)
-lower_perc_e  = quantile(errores, 0.01)
+upper_perc_e  = quantile(testing$errores, 0.99)
+lower_perc_e  = quantile(testing$errores, 0.01)
 
 bp_errores = ggplot(data = testing, 
              mapping = aes(y = errores, x="")) +
@@ -194,27 +194,16 @@ bp_errores
 # c.3 Identificación de observaciones con errores extremos (outliers) ----
 #------------------------------------------------------------------------------#
 
-outliers  = testing[errores < lower_perc_e | errores > upper_perc_e, ] 
+outliers  = testing[testing$errores < lower_perc_e | testing$errores > upper_perc_e, ] 
 nrow(outliers)
 print(outliers)
 
-outliers = dummy_cols(outliers, select_columns = c("Grupo_etario", 
-                                                   "Estrato",
-                                                   "Tamaño_firma", 
-                                                   "Edu_cat", 
-                                                   "Ocupacion_cat", 
-                                                   "Jefe_hogar_cat", 
-                                                   "Reg_salud_c", 
-                                                   "cotPension"))
+vars_factores = c("Grupo_etario", "Estrato", "Tamaño_firma", "Edu_cat", 
+                  "Ocupacion_cat", "Jefe_hogar_cat", "Reg_salud_c", 
+                  "cotPension")
 
-testing = dummy_cols(testing, select_columns = c("Grupo_etario", 
-                                                   "Estrato",
-                                                   "Tamaño_firma", 
-                                                   "Edu_cat", 
-                                                   "Ocupacion_cat", 
-                                                   "Jefe_hogar_cat", 
-                                                   "Reg_salud_c", 
-                                                   "cotPension"))
+outliers = dummy_cols(outliers, select_columns = vars_factores)
+testing  = dummy_cols(testing, select_columns = vars_factores)
 
 diff_means_table = data.frame(Variable = character(), 
                               Mean_testing = numeric(), 
