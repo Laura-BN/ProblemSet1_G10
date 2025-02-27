@@ -20,29 +20,56 @@ inTrain = caret::createDataPartition(y = data$log_y_total_m_ha, # the outcome da
 
 training = data %>% filter(row_number() %in% inTrain)
 testing  = data %>% filter(!row_number() %in% inTrain)
-?createDataPartition
+
 #------------------------------------------------------------------------------#
 # b. Informe y compare el rendimiento predictivo en términos del RMSE ----
 # de todas las especificaciones anteriores con al menos cinco (5) 
 # especificaciones adicionales que exploren las no linealidades y la complejidad.
 #------------------------------------------------------------------------------#
 
-model1_pt3 <- lm(log_y_total_m ~ age, data = data_pt3)
+#------------------------------------------------------------------------------#
+# Modelos (punto 3) ----
+#------------------------------------------------------------------------------#
 
-model2_pt3 <- lm(log_y_total_m ~ age + I(age^2), data = data_pt3)
+form_1_pt3 = log_y_total_m_ha ~ age + I(age^2)
 
-
-
-# MODELOS
-
-# ModelO 1 (punto 3):
-
-
-
-form_1<- totalHoursWorked ~ log_ingtot + age  + gender 
-
-modelo1a <- lm(form_1,
+modelo1    = lm(form_1_pt3,
                data = training)
+
+summary(modelo1)
+
+# Desempeño fuera de muestra 
+
+predictions = predict(modelo1, testing)
+score1      = caret::RMSE(predictions, testing$log_y_total_m_ha)
+score1
+
+#------------------------------------------------------------------------------#
+# Modelos (punto 4) ----
+#------------------------------------------------------------------------------#
+
+form_2_pt4 = log_y_total_m_ha ~ Mujer + 
+                                age + I(age^2) + 
+                                I(Max_nivel_educacion2) + 
+                                Experiencia_emp_act + I(Experiencia_emp_act^2) + 
+                                I(Tamaño_firma) + 
+                                Full_time +
+                                formal
+
+form_3_pt4 = log_y_total_m_ha ~ Mujer + 
+                                age + I(age^2) + 
+                                I(Max_nivel_educacion2) + 
+                                Experiencia_emp_act + I(Experiencia_emp_act^2) + 
+                                I(sizeFirm) + 
+                                Full_time +
+                                formal
+
+modelo1a <- lm(form_3_pt4,
+               data = training)
+summary(modelo1a)
+
+
+
 
 # Out of sample Performance
 predictions <- predict(modelo1a, testing)
