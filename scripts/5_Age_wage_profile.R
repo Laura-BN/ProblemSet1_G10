@@ -109,9 +109,15 @@ age_range <- seq(min(data_pt3$age), max(data_pt3$age), by = 1)
 predicted_log_w <- predict(model2_pt3, newdata = data.frame(age = age_range))
 
 # Graficar
+png(file.path(view_path, "age_wage_profile.png"), family = "Times New Roman", width = 800, height = 600)  # Guardar la gráfica en un archivo PNG
 plot(age_range, exp(predicted_log_w), type = "l", 
-     xlab = "Edad", ylab = "Ingreso por hora trabajada", 
-     main = "Perfil edad-salario estimado")
+        xlab = "Edad", ylab = "Ingreso por hora trabajada", 
+       family = "Times New Roman",
+       cex.lab = 2.0,    # Aumenta el tamaño de las etiquetas de los ejes
+       cex.axis = 2.0,   # Aumenta el tamaño de los números de los ejes
+       cex.main = 2      # Aumenta el tamaño del título
+       )
+dev.off()  # Cierra el dispositivo gráfico
 
 
 # Edad pico ----------------------------
