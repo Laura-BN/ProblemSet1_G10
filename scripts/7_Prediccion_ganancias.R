@@ -43,7 +43,7 @@ formulas = list(
                         Mujer + 
                         poly(age, 2, raw = T) +
                         I(Max_nivel_educacion2) +
-                        poly(Experiencia_emp_act, 2, raw = T) +
+                        Experiencia_emp_act + 
                         I(Tamaño_firma) + 
                         Full_time + formal,
             
@@ -52,7 +52,7 @@ formulas = list(
                         Mujer + 
                         poly(age, 2, raw = T) + 
                         I(Max_nivel_educacion2) + 
-                        poly(Experiencia_emp_act, 2, raw = T) +
+                        Experiencia_emp_act + 
                         I(sizeFirm_cat) + 
                         Full_time + formal,
 
@@ -116,6 +116,8 @@ formulas = list(
 modelos     = list()
 mse_scores = data.frame(Modelo = character(), 
                          MSE = numeric())
+
+table(data$Tamaño_firma) # sizeFirm_cat, sizeFirm
 
 for (i in seq(formulas)) {
   
