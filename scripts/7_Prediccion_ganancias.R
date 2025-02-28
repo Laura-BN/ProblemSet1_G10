@@ -43,7 +43,7 @@ formulas = list(
                         Mujer + 
                         poly(age, 2, raw = TRUE) +
                         I(Max_nivel_educacion2) +
-                        poly(Experiencia_emp_act, 2, raw = TRUE)                       
+                        poly(Experiencia_emp_act, 2, raw = TRUE) +                     
                         I(Tamaño_firma) + 
                         Full_time + formal,
 
@@ -52,7 +52,7 @@ formulas = list(
                         Mujer + 
                         poly(age, 2, raw = TRUE) + 
                         I(Max_nivel_educacion2) + 
-                        poly(Experiencia_emp_act, 2, raw = TRUE)                       
+                        poly(Experiencia_emp_act, 2, raw = TRUE) +                    
                         I(sizeFirm_cat) + 
                         Full_time + formal,
 
@@ -67,8 +67,8 @@ formulas = list(
               form_5 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
                         poly(age, 4, raw = TRUE) + 
-                        I(Max_nivel_educacion2) + poly(age, 4, raw = T):I(Max_nivel_educacion2) + # interacción
-                        poly(Experiencia_emp_act, 4, raw = T) +
+                        I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 4, raw = TRUE) +
                         I(sizeFirm_cat) + 
                         Full_time + formal, 
            
@@ -136,14 +136,32 @@ for (i in seq(formulas)) {
 # mse_scores
 # modelos_1 = modelos[6:9]
 
-stargazer::stargazer(modelos, type = "text",
+resultados_modelos = file.path(view_path, "/modelos_p5.txt")
+sink(resultados_modelos)
+
+
+stargazer::stargazer(modelos, type = "latex",
                      title = "Resultados de los Modelos",
                      dep.var.labels = "log_y_total_m_ha",
                      float = FALSE)
+sink(NULL)
 
 # It is clear that as complexity increases, performance improves until a point 
 # where too much complexity results in inferior performance.
 mse_scores
+
+mse_scores_table = file.path(view_path, "mse_scores_CV_p5.txt")
+sink(mse_scores_table)
+
+mse_scores
+mse_scores_1 = xtable(mse_scores, digits = 5)
+
+print(mse_scores_1, type = "latex", include.rownames = FALSE)
+
+sink(NULL)
+
+mse_scores
+
 #------------------------------------------------------------------------------#
 # c. Para la especificación con el menor error de predicción ----
 # explore aquellas observaciones que parecen \textit{miss the mark} (no predicen 
@@ -190,6 +208,10 @@ bp_errores = ggplot(data = testing,
   geom_hline(yintercept = lower_perc_e, linetype = "solid", color = "#00EEEE", size = 0.7)  
 
 bp_errores
+
+
+ggsave(file.path(paste0(view_path, "/bp_errores_p5.png")), 
+       plot = bp_errores, width = 10, height = 6, dpi = 300)
 
 #------------------------------------------------------------------------------#
 # c.3 Identificación de observaciones con errores extremos (outliers) ----
@@ -334,8 +356,11 @@ b_2 = ggplot(data = outliers,
       geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
 
 box_plot_m = grid.arrange(b_1, b_2, ncol = 2, 
-                          top = textGrob("Box-plot ingresos mensuales",
+                          top = textGrob("Box-plot ingresos mensuales muestras de prueba y puntos atípiocs",
                            gp = gpar(fontsize = 14)))
+
+ggsave(file.path(paste0(view_path, "/bp_testing_outliers_p5.png")), 
+       plot = box_plot_m, width = 10, height = 6, dpi = 300)
 
 #------------------------------------------------------------------------------#
 # c.4.3 Tabla diferencia de medias testing y outliers ----
@@ -348,7 +373,13 @@ print(diff_means, type = "latex", include.rownames = FALSE)
 table1 = testing  %>% dplyr::summarise(num_observaciones = n()); table1
 table2 = outliers %>% dplyr::summarise(num_observaciones = n()); table2
 
-#stargazer(as.data.frame(outliers[, variables]), type = "text")
+
+diff_means_table_1 = file.path(view_path, "diff_means_test_outl_p5.txt")
+sink(diff_means_table_1)
+
+print(diff_means, type = "latex", include.rownames = FALSE)
+
+sink(NULL)
 
 #------------------------------------------------------------------------------#
 # d. LOOCV ----
@@ -359,54 +390,73 @@ table2 = outliers %>% dplyr::summarise(num_observaciones = n()); table2
 # con la estadística de influencia. {\color{red}(Nota: al intentar realizar esta 
 # subsección, los cálculos pueden llevar mucho tiempo, según sus habilidades de
 # codificación, ¡planifique en consecuencia!)}
-#------------------------------------------------------------------------------#
+#------------------------------------------------------------------------------#ç
 
-ctrl = trainControl(method = "LOOCV") # Leave One Out Cross Validation
+# Seleccionar los dos modelos con menor MSE 
+n_modelos_min_MSE = order(mse_scores$MSE)[1:2]
+n_modelos_min_MSE
+
+formulas_min_MSE = formulas[n_modelos_min_MSE]
+
+#------------------------------------------------------------------------------#ç
+
 
 modelos_LOOCV = list()
 
 mse_scores_LOOCV = data.frame(Modelo = character(), 
-                              MSE = numeric())
+                               MSE = numeric(), 
+                               stringsAsFactors = FALSE)
 
-for (i in seq(formulas)) {
+# formulas_ = formulas[1:2]
+# data_ = data
+# data = data_
+# data = data %>%  slice(1:2000)
+
+for (i in seq_along(formulas_min_MSE)) {
+  
+  ctrl = trainControl(method = "LOOCV") # Leave One Out Cross Validation
   
   # Contar tiempo de ejecución 
   
   start_time = Sys.time()
-  n_obs <- nrow(data)
+  n_obs = nrow(data)
   cat("Starting LOOCV training with", n_obs, "iterations...\n")
   ctrl$verboseIter = TRUE  # Enable progress printing
-  end_time = Sys.time() # Calculate and display timing
-  training_time = difftime(end_time, start_time, units = "mins")
-  cat("\nLOOCV training completed in:", round(training_time, 2), "minutes\n")
-  cat("Average time per fold:", round(training_time/n_obs, 4), "minutes\n")
-  
-  ctrl$verboseIter = TRUE  # Enable progress printing
+
   
   # Modelo 
   
-  modelo = train(formulas[[i]],
+  modelo = train(formulas_min_MSE[[i]],
                  data = data,
                  method = 'lm', 
                  trControl= ctrl)
   
   modelos_LOOCV[[i]] = modelo  
-  
+
   predictions = predict(modelo, data)  # predicciones
   
   mse_scores_LOOCV = rbind(mse_scores_LOOCV, 
                            data.frame(
-                             Modelo = paste0("Modelo ", i),
-                             MSE    = caret::RMSE(predictions, data$log_y_total_m_ha)))  # cálculo MSE
+                           Modelo = paste0("Modelo ", i),
+                           MSE    = caret::RMSE(predictions, data$log_y_total_m_ha)))  # cálculo MSE
   
   # score_MSE = caret::RMSE(predictions, data$log_y_total_m_ha)
   
-  head(modelo$pred)
-  #score1c<-RMSE(modelo1c$pred$pred, data$log_y_total_m_ha)
+  # head(modelo$pred)
+  #score1c<-RMSE(modelo$pred$pred, data$log_y_total_m_ha)
+  
   
   cat(paste0("\nModelo ", i, " completo. MSE: ", mse_scores_LOOCV[i, 2]))
+  
+  end_time = Sys.time() # Calculate and display timing
+  training_time = difftime(end_time, start_time, units = "mins")
+  cat("\nLOOCV training completed in:", round(training_time, 2), "minutes\n")
+  cat("Average time per fold:", round(training_time/n_obs, 4), "minutes\n")
+
 }
 
+colnames(mse_scores)[2]       = "MSE_CV"
+colnames(mse_scores_LOOCV)[2] = "MSE_LOOCV"
 
-
-rbind(mse_scores, mse_scores_LOOCV)
+tabla_VF_MSE = cbind(mse_scores, mse_scores_LOOCV[ , 2]) 
+tabla_VF_MSE
