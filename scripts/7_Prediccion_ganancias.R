@@ -36,76 +36,75 @@ testing  = data %>% filter(!row_number() %in% inTrain)
 formulas = list(
   
            # Modelo punto 3
-           form_1_pt3 = log_y_total_m_ha ~ poly(age, 2, raw = T),
+           form_1_pt3 = log_y_total_m_ha ~ poly(age, 2, raw = TRUE),
            
            # Modelo punto 4 
            form_2_pt4 = log_y_total_m_ha ~ 
                         Mujer + 
-                        poly(age, 2, raw = T) +
+                        poly(age, 2, raw = TRUE) +
                         I(Max_nivel_educacion2) +
-                        Experiencia_emp_act + 
+                        poly(Experiencia_emp_act, 2, raw = TRUE)                       
                         I(Tamaño_firma) + 
-                        Full_time + formal,
-            
-           # Modelo punto 4
-           form_3_pt4 = log_y_total_m_ha ~ 
-                        Mujer + 
-                        poly(age, 2, raw = T) + 
-                        I(Max_nivel_educacion2) + 
-                        Experiencia_emp_act + 
-                        I(sizeFirm_cat) + 
                         Full_time + formal,
 
            # Modelos adicionales punto 5
+           form_3_pt4 = log_y_total_m_ha ~ 
+                        Mujer + 
+                        poly(age, 2, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + 
+                        poly(Experiencia_emp_act, 2, raw = TRUE)                       
+                        I(sizeFirm_cat) + 
+                        Full_time + formal,
+
               form_4 = log_y_total_m_ha ~ 
-                        Mujer + poly(age, 3, raw = T):Mujer + # interacción
-                        poly(age, 3, raw = T) + 
-                        I(Max_nivel_educacion2) + poly(age, 3, raw = T):I(Max_nivel_educacion2) + # interacción
-                        poly(Experiencia_emp_act, 3, raw = T) +
+                        Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
+                        poly(age, 3, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 3, raw = TRUE) +
                         I(sizeFirm_cat) + 
                         Full_time + formal,
 
               form_5 = log_y_total_m_ha ~ 
-                        Mujer + poly(age, 4, raw = T):Mujer + # interacción
-                        poly(age, 4, raw = T) + 
+                        Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
+                        poly(age, 4, raw = TRUE) + 
                         I(Max_nivel_educacion2) + poly(age, 4, raw = T):I(Max_nivel_educacion2) + # interacción
                         poly(Experiencia_emp_act, 4, raw = T) +
                         I(sizeFirm_cat) + 
                         Full_time + formal, 
            
               form_6 = log_y_total_m_ha ~ 
-                        Mujer + poly(age, 3, raw = T):Mujer + # interacción
-                        poly(age, 3, raw = T) + 
-                        I(Max_nivel_educacion2) + poly(age, 3, raw = T):I(Max_nivel_educacion2) + # interacción
-                        poly(Experiencia_emp_act, 3, raw = T) +
+                        Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
+                        poly(age, 3, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 3, raw = TRUE) +
                         I(sizeFirm_cat) + 
                         Full_time + formal +
                         I(Ocupacion) + I(oficio), # más categorías 
            
               form_7 = log_y_total_m_ha ~ 
-                        Mujer + poly(age, 4, raw = T):Mujer + # interacción
-                        poly(age, 4, raw = T) + 
-                        I(Max_nivel_educacion2) + poly(age, 4, raw = T):I(Max_nivel_educacion2) + # interacción
-                        poly(Experiencia_emp_act, 4, raw = T) +
+                        Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
+                        poly(age, 4, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 4, raw = TRUE) +
                         I(sizeFirm_cat) + 
                         Full_time + formal + 
                         I(Ocupacion) + I(oficio), # más categorías 
 
               form_8 = log_y_total_m_ha ~ 
-                        Mujer + poly(age, 3, raw = T):Mujer + # interacción
-                        poly(age, 3, raw = T) + 
-                        I(Max_nivel_educacion2) + poly(age, 3, raw = T):I(Max_nivel_educacion2) + # interacción
-                        poly(Experiencia_emp_act, 3, raw = T) +
+                        Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
+                        poly(age, 3, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 3, raw = TRUE) +
                         I(sizeFirm_cat) + 
                         Full_time + formal + 
                         I(Ocupacion) + I(oficio) + # más categorías
                         I(Cot_pension) + Jefe_hogar + I(Estrato), # más categorías 
            
               form_9 = log_y_total_m_ha ~ 
-                        Mujer + poly(age, 4, raw = T):Mujer + # interacción
-                        poly(age, 4, raw = T) + 
-                        I(Max_nivel_educacion2) + poly(age, 4, raw = T):I(Max_nivel_educacion2) + # interacción
-                        poly(Experiencia_emp_act, 4, raw = T) +
+                        Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
+                        poly(age, 4, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 4, raw = TRUE) +
                         I(sizeFirm_cat) + 
                         Full_time + formal + 
                         I(Ocupacion) + I(oficio) + # más categorías 
@@ -144,7 +143,7 @@ stargazer::stargazer(modelos, type = "text",
 
 # It is clear that as complexity increases, performance improves until a point 
 # where too much complexity results in inferior performance.
-
+mse_scores
 #------------------------------------------------------------------------------#
 # c. Para la especificación con el menor error de predicción ----
 # explore aquellas observaciones que parecen \textit{miss the mark} (no predicen 
@@ -187,8 +186,8 @@ bp_errores = ggplot(data = testing,
              ggtitle("Box-plot errores de predicción en muestra de prueba del modelo con mínimo MSE")+
              ylab("Errores")+
              xlab("") +
-  geom_hline(yintercept = upper_perc_e, linetype="solid", color="#00EEEE",size=0.7) +
-  geom_hline(yintercept = lower_perc_e, linetype="solid", color="#00EEEE",size=0.7)  
+  geom_hline(yintercept = upper_perc_e, linetype = "solid", color = "#00EEEE", size = 0.7) +
+  geom_hline(yintercept = lower_perc_e, linetype = "solid", color = "#00EEEE", size = 0.7)  
 
 bp_errores
 
@@ -205,16 +204,16 @@ vars_factores = c("Grupo_etario", "Estrato", "Tamaño_firma", "Edu_cat",
                   "cotPension")
 
 outliers = dummy_cols(outliers, select_columns = vars_factores)
-testing  = dummy_cols(testing, select_columns = vars_factores)
+testing  = dummy_cols(testing,  select_columns = vars_factores)
 
-diff_means_table = data.frame(Variable = character(), 
-                              Mean_testing = numeric(), 
-                              se_test = numeric(), 
+diff_means_table = data.frame(Variable      = character(), 
+                              Mean_testing  = numeric(), 
+                              se_test       = numeric(), 
                               Mean_outliers = numeric(), 
-                              se_out = numeric(), 
-                              Dif = numeric(),
-                              p_value = numeric(), 
-                              Significance = character(),
+                              se_out        = numeric(), 
+                              Dif           = numeric(),
+                              p_value       = numeric(), 
+                              Significance  = character(),
                               stringsAsFactors = FALSE)
 
 variables = c("formal", "informal",  
@@ -244,7 +243,7 @@ for (var in variables) {
   n1 = nrow(testing)  # Total de observaciones en testing
   n2 = nrow(outliers) # Total de observaciones en outliers
   
-  x1 = sum(testing[[var]] == 1, na.rm = TRUE)  
+  x1 = sum(testing[[var]]  == 1, na.rm = TRUE)  
   x2 = sum(outliers[[var]] == 1, na.rm = TRUE) 
   
   test = prop.test(x = c(x1, x2), n = c(n1, n2), alternative = "two.sided", correct = T)
@@ -252,14 +251,14 @@ for (var in variables) {
   significance = ifelse(test$p.value < 0.05, "***", "")
   
   diff_means_table = rbind(diff_means_table, data.frame(
-    Variable = var,
-    Mean_testing = (x1 /n1)*100, 
-    se_test = sqrt(((x1 /n1)*(1-(x1 /n1)))/n1) * 100,
-    Mean_outliers = (x2/n2)*100, 
-    se_out = sqrt(((x2 /n2)*(1-(x2 /n2)))/n2) * 100,
-    Dif =  ((x1 /n1)*100) - ((x2/n2)*100),
-    p_value = test$p.value, 
-    Significance = significance
+  Variable      = var,
+  Mean_testing  = (x1 /n1) * 100, 
+  se_test       = sqrt(((x1 /n1) * (1-(x1 /n1)))/n1) * 100,
+  Mean_outliers = (x2/n2) * 100, 
+  se_out        = sqrt(((x2 /n2) * (1-(x2 /n2)))/n2) * 100,
+  Dif           = ((x1 /n1) * 100) - ((x2/n2) * 100),
+  p_value       = test$p.value, 
+  Significance  = significance
   ))
   
 }
@@ -282,7 +281,7 @@ variables_2 = list("y_total_m", "y_total_m_ha")
 
 for (var in variables_2) {
   
-  x1 = mean(testing[[var]], na.rm = TRUE)  
+  x1 = mean(testing[[var]],  na.rm = TRUE)  
   x2 = mean(outliers[[var]], na.rm = TRUE) 
   
   test = t.test(testing[[var]], outliers[[var]], 
@@ -291,14 +290,14 @@ for (var in variables_2) {
   significance = ifelse(test$p.value < 0.05, "***", "")
   
   diff_means_table = rbind(diff_means_table, data.frame(
-    Variable = var,
-    Mean_testing = x1, 
-    se_test = sd(testing[[var]], na.rm = TRUE) / sqrt(sum(!is.na(testing[[var]]))),
-    Mean_outliers = x2, 
-    se_out = ( sd(outliers[[var]], na.rm = TRUE) / sqrt(sum(!is.na(outliers[[var]]))) ),
-    Dif =  x1 - x2,
-    p_value = test$p.value, 
-    Significance = significance
+  Variable         = var,
+  Mean_testing     = x1, 
+  se_test          = sd(testing[[var]], na.rm = TRUE) / sqrt(sum(!is.na(testing[[var]]))),
+  Mean_outliers    = x2, 
+  se_out           = (sd(outliers[[var]], na.rm = TRUE) / sqrt(sum(!is.na(outliers[[var]]))) ),
+  Dif              =  x1 - x2,
+  p_value          = test$p.value, 
+  Significance     = significance
   ))
 }
 
@@ -311,32 +310,32 @@ for (var in variables_2) {
 upper_perc_test  = quantile(testing$y_total_m, 0.99)
 lower_perc_test  = quantile(testing$y_total_m, 0.01)
 
-b_1 = ggplot(data = testing, 
-             mapping = aes(y = y_total_m/1000000, x="")) +
-  theme_bw() +
-  geom_boxplot()  +
-  ggtitle("Testing")+
-  ylab("Ingresos mensuales (millones de pesos)")+
-  xlab("") +
-  geom_hline(yintercept = upper_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7) +
-  geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
+b_1 = ggplot(data    = testing, 
+      mapping = aes(y = y_total_m/1000000, x="")) +
+      theme_bw() +
+      geom_boxplot()  +
+      ggtitle("Testing")+
+      ylab("Ingresos mensuales (millones de pesos)")+
+      xlab("") +
+      geom_hline(yintercept = upper_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7) +
+      geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
 
 upper_perc_out  = quantile(outliers$y_total_m, 0.99)
 lower_perc_out  = quantile(outliers$y_total_m, 0.01)
 
 b_2 = ggplot(data = outliers, 
-             mapping = aes(y = y_total_m/1000000, x="")) +
-  theme_bw() +
-  geom_boxplot()  +
-  ggtitle("Outliers")+
-  ylab("Ingresos mensuales (millones de pesos)")+
-  xlab("") +
-  geom_hline(yintercept = upper_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7) +
-  geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
+      mapping = aes(y = y_total_m/1000000, x="")) +
+      theme_bw() +
+      geom_boxplot()  +
+      ggtitle("Outliers")+
+      ylab("Ingresos mensuales (millones de pesos)")+
+      xlab("") +
+      geom_hline(yintercept = upper_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7) +
+      geom_hline(yintercept = lower_perc_test/1000000, linetype="solid", color="#00EEEE",size=0.7)  
 
 box_plot_m = grid.arrange(b_1, b_2, ncol = 2, 
                           top = textGrob("Box-plot ingresos mensuales",
-                                         gp = gpar(fontsize = 14)))
+                           gp = gpar(fontsize = 14)))
 
 #------------------------------------------------------------------------------#
 # c.4.3 Tabla diferencia de medias testing y outliers ----
@@ -362,48 +361,52 @@ table2 = outliers %>% dplyr::summarise(num_observaciones = n()); table2
 # codificación, ¡planifique en consecuencia!)}
 #------------------------------------------------------------------------------#
 
-# dos min de db
+ctrl = trainControl(method = "LOOCV") # Leave One Out Cross Validation
 
-# We will just change the method of our cross validation approach in the
-# function trainControl.
+modelos_LOOCV = list()
 
-ctrl = trainControl(
-  method = "LOOCV") ## input the method Leave One Out Cross Validation
+mse_scores_LOOCV = data.frame(Modelo = character(), 
+                              MSE = numeric())
 
-# model 1 
+for (i in seq(formulas)) {
+  
+  # Contar tiempo de ejecución 
+  
+  start_time = Sys.time()
+  n_obs <- nrow(data)
+  cat("Starting LOOCV training with", n_obs, "iterations...\n")
+  ctrl$verboseIter = TRUE  # Enable progress printing
+  end_time = Sys.time() # Calculate and display timing
+  training_time = difftime(end_time, start_time, units = "mins")
+  cat("\nLOOCV training completed in:", round(training_time, 2), "minutes\n")
+  cat("Average time per fold:", round(training_time/n_obs, 4), "minutes\n")
+  
+  ctrl$verboseIter = TRUE  # Enable progress printing
+  
+  # Modelo 
+  
+  modelo = train(formulas[[i]],
+                 data = data,
+                 method = 'lm', 
+                 trControl= ctrl)
+  
+  modelos_LOOCV[[i]] = modelo  
+  
+  predictions = predict(modelo, data)  # predicciones
+  
+  mse_scores_LOOCV = rbind(mse_scores_LOOCV, 
+                           data.frame(
+                             Modelo = paste0("Modelo ", i),
+                             MSE    = caret::RMSE(predictions, data$log_y_total_m_ha)))  # cálculo MSE
+  
+  # score_MSE = caret::RMSE(predictions, data$log_y_total_m_ha)
+  
+  head(modelo$pred)
+  #score1c<-RMSE(modelo1c$pred$pred, data$log_y_total_m_ha)
+  
+  cat(paste0("\nModelo ", i, " completo. MSE: ", mse_scores_LOOCV[i, 2]))
+}
 
-# contar tiempo en correeeeer
-
-# Start timing
-start_time = Sys.time()
-
-# Get total number of observations for progress tracking
-n_obs <- nrow(db)
-cat("Starting LOOCV training with", n_obs, "iterations...\n")
-
-# Train model with progress printing
-ctrl$verboseIter = TRUE  # Enable progress printing
-modelo1c = train(form_1,
-                  data = db,
-                  method = 'lm', 
-                  trControl = ctrl)
-
-# Calculate and display timing
-end_time = Sys.time()
-training_time = difftime(end_time, start_time, units = "mins")
-cat("\nLOOCV training completed in:", round(training_time, 2), "minutes\n")
-cat("Average time per fold:", round(training_time/n_obs, 4), "minutes\n")
 
 
-# normalito
-
-ctrl$verboseIter <- TRUE  # Enable progress printing
-modelo1c <- train(form_1,
-                  data = db,
-                  method = 'lm', 
-                  trControl= ctrl)
-modelo1c
-
-head(modelo1c$pred)
-score1c<-RMSE(modelo1c$pred$pred, db$totalHoursWorked)
-
+rbind(mse_scores, mse_scores_LOOCV)
