@@ -115,7 +115,7 @@ plot(age_range, exp(predicted_log_w), type = "l",
        family = "Times New Roman",
        cex.lab = 2.0,    # Aumenta el tamaño de las etiquetas de los ejes
        cex.axis = 2.0,   # Aumenta el tamaño de los números de los ejes
-       cex.main = 2      # Aumenta el tamaño del título
+       cex.main = 2.0      # Aumenta el tamaño del título
        )
 dev.off()  # Cierra el dispositivo gráfico
 
