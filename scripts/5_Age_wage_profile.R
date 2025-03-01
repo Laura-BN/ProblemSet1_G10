@@ -106,25 +106,55 @@ stargazer(model1_pt3, model2_pt3, type = "latex",
 
 # Generar los valores estimados para la gráfica
 age_range <- seq(min(data_pt3$age), max(data_pt3$age), by = 1)
-predicted_log_w <- predict(model2_pt3, newdata = data.frame(age = age_range))
+predicted_log_w <- predict(model2_pt3, newdata = data.frame(age = age_range), se.fit = TRUE)
 
-# Graficar
+# Calcular los intervalos de confianza (95%)
+#lower_bound <- exp(predicted_log_w$fit - 1.96 * predicted_log_w$se.fit)  # Límite inferior
+#upper_bound <- exp(predicted_log_w$fit + 1.96 * predicted_log_w$se.fit)  # Límite superior
+
+# Calcular los límites inferior y superior en términos de 2 desviaciones estándar de la media
+lower_bound <- predicted_log_w$fit - 2 * predicted_log_w$se.fit  # Límite inferior (2 desviaciones estándar)
+upper_bound <- predicted_log_w$fit + 2 * predicted_log_w$se.fit  # Límite superior (2 desviaciones estándar)
+
+# Convertir a escala original para graficar (porque se usa el logaritmo de los ingresos por hora trabajada)
+lower_bound_exp <- exp(lower_bound)  # Exponenciar el límite inferior
+upper_bound_exp <- exp(upper_bound)  # Exponenciar el límite superior
+
+# Graficar la predicción
 png(file.path(view_path, "age_wage_profile.png"), family = "Times New Roman", width = 800, height = 600)  # Guardar la gráfica en un archivo PNG
-plot(age_range, exp(predicted_log_w), type = "l", 
-        xlab = "Edad", ylab = "Ingreso por hora trabajada", 
-       family = "Times New Roman",
-       cex.lab = 2.0,    # Aumenta el tamaño de las etiquetas de los ejes
-       cex.axis = 2.0,   # Aumenta el tamaño de los números de los ejes
-       cex.main = 2.0      # Aumenta el tamaño del título
-       )
+
+
+# Sombrear el área de los intervalos de confianza
+polygon(c(age_range, rev(age_range)), 
+        c(lower_bound_exp, rev(upper_bound_exp)), 
+        col = rgb(0.6, 0.8, 1, 0.5),  # Azul claro con mayor transparencia
+        border = rgb(0, 0, 1, 0.5))  # Borde azul claro de la sombra con algo de transparencia
+
+plot(age_range, exp(predicted_log_w$fit), type = "l", 
+     xlab = "Edad", ylab = "Ingreso por hora trabajada", 
+     family = "Times New Roman",
+     cex.lab = 2.0,    # Aumenta el tamaño de las etiquetas de los ejes
+     cex.axis = 2.0,   # Aumenta el tamaño de los números de los ejes
+     cex.main = 2.0,     # Aumenta el tamaño del título
+     lwd = 2 
+)
+
+# Añadir los intervalos de confianza
+lines(age_range, lower_bound, col = "blue", lty = 2)  # Línea para el límite inferior (azul y línea discontinua)
+lines(age_range, upper_bound, col = "blue", lty = 2)  # Línea para el límite superior (azul y línea discontinua)
+
+
+
+
 dev.off()  # Cierra el dispositivo gráfico
+
 
 
 # Edad pico ----------------------------
 
 # Calcular edad pico
-age_peak <- -coef(model2_pt3)[2] / (2 * coef(model2_pt3)[3])
-age_peak
+age_peak_final <- -coef(model2_pt3)[2] / (2 * coef(model2_pt3)[3])
+age_peak_final
 
 # Función para calcular la edad pico con la variable 'w' explícita
 age_peak_func <- function(data, indices) {
@@ -155,45 +185,75 @@ ci_table <- data.frame(
 print(xtable(ci_table, caption = "Intervalo de confianza (95%)"), type = "latex")
 
 
-
-
-
-
-
 # Calcular la distribución bootstrap de la edad pico
 age_peak_bootstrap <- bootstrap_results$t
 
 # Crear un data frame con los resultados para el boxplot
 df_age_peak <- data.frame(age_peak = age_peak_bootstrap)
 
-# Crear el gráfico boxplot con puntos menos visibles #Distribución de la Edad Pico Estimada
 
-png(file.path(view_path, "age_wage_box-plot.png"), family = "Times New Roman", width = 800, height = 600)  # Guardar la gráfica en un archivo PNG
+# Crear el gráfico boxplot con la edad pico estimada
 
-ggplot(df_age_peak, aes(x = "", y = age_peak)) +
-  geom_boxplot(fill = "white", color = "black") +
-  geom_point(aes(x = 1, y = age_peak), 
-             position = position_jitter(width = 0.1), 
-             color = "gray", 
-             alpha = 0.07) +  # Ajustar la transparencia de los puntos (más bajo es más sutil)
-  labs(#title = "",
-       x = "",
-       y = "Edad pico") +
-  geom_hline(yintercept = age_peak, linetype = "solid", color = "red", size = 1) +  # Línea continua
-  geom_hline(yintercept = lower, linetype = "solid", color = "blue", size = 1) +  # Línea continua
-  geom_hline(yintercept = upper, linetype = "solid", color = "blue", size = 1) +  # Línea continua
-  # Añadir los valores a la derecha de las líneas
-  geom_text(data = data.frame(y = age_peak, label = round(age_peak, 2)), 
-            aes(x = 1.5, y = y, label = label), color = "red", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor de la edad pico
-  geom_text(data = data.frame(y = lower, label = round(lower, 2)), 
-            aes(x = 1.5, y = y, label = label), color = "blue", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor límite inferior
-  geom_text(data = data.frame(y = upper, label = round(upper, 2)), 
-            aes(x = 1.5, y = y, label = label), color = "blue", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor límite superior
-  theme_minimal() +
+age_peak_boxplot <- ggplot(df_age_peak, aes(x = "", y = age_peak)) +
+                geom_boxplot(fill = "white", color = "black", size=0.7) +
+                geom_point(aes(x = 1, y = age_peak), 
+                           position = position_jitter(width = 0.1), 
+                           color = "gray", 
+                           alpha = 0.07) +  # Ajustar la transparencia de los puntos (más bajo es más sutil)
+                labs(#title = "",
+                     x = "",
+                     y = "Edad pico estimada") +
+                geom_hline(yintercept = age_peak, linetype = "solid", color = "red", size = 1) +  # Línea continua
+                geom_hline(yintercept = lower, linetype = "solid", color = "blue", size = 1) +  # Línea continua
+                geom_hline(yintercept = upper, linetype = "solid", color = "blue", size = 1) +  # Línea continua
+                # Añadir los valores a la derecha de las líneas
+                geom_text(data = data.frame(y = age_peak, label = round(age_peak_final, 2)), 
+                          aes(x = 1.5, y = y, label = label), color = "red", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor de la edad pico
+                geom_text(data = data.frame(y = lower, label = round(lower, 2)),
+                          aes(x = 1.5, y = y, label = label), color = "blue", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor límite inferior
+                geom_text(data = data.frame(y = upper, label = round(upper, 2)), 
+                          aes(x = 1.5, y = y, label = label), color = "blue", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor límite superior
+                theme_minimal() +
+                theme(axis.text.x = element_blank(),
+                      axis.ticks.x = element_blank(),
+                      panel.border = element_rect(color = "grey", fill = NA, size = 1),
+                      text = element_text(family = "Times New Roman", size = 25))  # Cambiar la fuente a Times New Roman
 
-theme(axis.text.x = element_blank(),
-      axis.ticks.x = element_blank(),
-      panel.border = element_rect(color = "grey", fill = NA, size = 1),
-      text = element_text(family = "Times New Roman", size = 25))  # Cambiar la fuente a Times New Roman
+
+# Crear un gráfico de barras con la distribución de las estimaciones por bootstrap
+
+age_peak_bars <- ggplot(df_age_peak, aes(x = age_peak)) +
+                geom_histogram(fill = "grey", color = "black", bins = 30, boundary = 0, size = 0.5) +  # Gráfico de barras (histograma)
+                labs(
+                  #title = "Distribución de la Edad Pico Estimada (Bootstrap)",  # Título del gráfico
+                  x = "Edad pico estimada",
+                  y = "Frecuencia"
+                ) +
+                geom_vline(xintercept = age_peak_final, linetype = "solid", color = "red", size = 1) +  # Línea vertical en age_peak_final
+                annotate("text", x = 42.3, y = 1040, label = round(age_peak_final, 2),  # Etiqueta con el valor de age_peak_final
+                         color = "red", size = 6, vjust = -1, hjust = 0.5, family = "Times New Roman") +  # Etiqueta arriba de la línea
+                theme_minimal() +
+                theme(
+                  text = element_text(family = "Times New Roman", size = 25),  # Fuente y tamaño
+                  plot.title = element_text(hjust = 0.5),  # Centra el título
+                  axis.title.x = element_text(size = 25),  # Tamaño del título del eje X
+                  axis.title.y = element_text(size = 25),  # Tamaño del título del eje Y
+                  axis.text = element_text(size = 25),  # Tamaño de los textos de los ejes
+                  panel.grid.major = element_blank(),  # Eliminar cuadrícula mayor
+                  panel.grid.minor = element_blank(),  # Eliminar cuadrícula menor
+                  panel.border = element_blank(),  # Eliminar el borde del panel
+                  axis.line = element_line(color = "gray"),  # Cambiar el color de las líneas de los ejes a gris
+                  axis.ticks = element_line(color = "gray")  # Cambiar el color de las marcas de los ejes a gris
+                )
+
+
+# Combinar ambos gráficos en uno solo usando grid.arrange
+png(file.path(view_path, "age_wage_box-plot.png"), family = "Times New Roman", width = 1200, height = 600)  # Guardar la imagen combinada
+
+grid.arrange(age_peak_bars, age_peak_boxplot, ncol = 2)  # Colocar los gráficos lado a lado (ncol = 2)
 
 dev.off()  # Cierra el dispositivo gráfico
+
+
+
+
