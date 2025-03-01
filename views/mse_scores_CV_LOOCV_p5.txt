@@ -1,0 +1,13 @@
+% latex table generated in R 4.4.2 by xtable 1.8-4 package
+% Fri Feb 28 18:23:28 2025
+\begin{table}[ht]
+\centering
+\begin{tabular}{lrr}
+  \hline
+Modelo & MSE\_CV & MSE\_LOOCV \\ 
+  \hline
+Modelo 8 & 0.59034 & 0.57654 \\ 
+  Modelo 9 & 0.59051 & 0.57612 \\ 
+   \hline
+\end{tabular}
+\end{table}

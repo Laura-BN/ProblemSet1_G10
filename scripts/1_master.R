@@ -70,7 +70,8 @@ p_load(tidyverse,
        fastDummies, 
        xtable, 
        broom, 
-       caret) 
+       caret,
+       boot) 
 
 #Instalar paquete DescTools
 # install.packages("DescTools")
