@@ -137,7 +137,7 @@ plot(age_range, exp(predicted_log_w$fit), type = "l",
      cex.axis = 2.0,   # Aumenta el tamaño de los números de los ejes
      cex.main = 2.0,     # Aumenta el tamaño del título
      lwd = 2 
-)
+    )
 
 # Añadir los intervalos de confianza
 lines(age_range, lower_bound, col = "blue", lty = 2)  # Línea para el límite inferior (azul y línea discontinua)
