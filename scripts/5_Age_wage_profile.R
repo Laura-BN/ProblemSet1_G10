@@ -153,3 +153,47 @@ ci_table <- data.frame(
 
 # Imprimir la tabla en formato LaTeX
 print(xtable(ci_table, caption = "Intervalo de confianza (95%)"), type = "latex")
+
+
+
+
+
+
+
+# Calcular la distribución bootstrap de la edad pico
+age_peak_bootstrap <- bootstrap_results$t
+
+# Crear un data frame con los resultados para el boxplot
+df_age_peak <- data.frame(age_peak = age_peak_bootstrap)
+
+# Crear el gráfico boxplot con puntos menos visibles #Distribución de la Edad Pico Estimada
+
+png(file.path(view_path, "age_wage_box-plot.png"), family = "Times New Roman", width = 800, height = 600)  # Guardar la gráfica en un archivo PNG
+
+ggplot(df_age_peak, aes(x = "", y = age_peak)) +
+  geom_boxplot(fill = "white", color = "black") +
+  geom_point(aes(x = 1, y = age_peak), 
+             position = position_jitter(width = 0.1), 
+             color = "gray", 
+             alpha = 0.07) +  # Ajustar la transparencia de los puntos (más bajo es más sutil)
+  labs(#title = "",
+       x = "",
+       y = "Edad pico") +
+  geom_hline(yintercept = age_peak, linetype = "solid", color = "red", size = 1) +  # Línea continua
+  geom_hline(yintercept = lower, linetype = "solid", color = "blue", size = 1) +  # Línea continua
+  geom_hline(yintercept = upper, linetype = "solid", color = "blue", size = 1) +  # Línea continua
+  # Añadir los valores a la derecha de las líneas
+  geom_text(data = data.frame(y = age_peak, label = round(age_peak, 2)), 
+            aes(x = 1.5, y = y, label = label), color = "red", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor de la edad pico
+  geom_text(data = data.frame(y = lower, label = round(lower, 2)), 
+            aes(x = 1.5, y = y, label = label), color = "blue", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor límite inferior
+  geom_text(data = data.frame(y = upper, label = round(upper, 2)), 
+            aes(x = 1.5, y = y, label = label), color = "blue", size = 8, vjust = -0.5, family = "Times New Roman") +  # Valor límite superior
+  theme_minimal() +
+
+theme(axis.text.x = element_blank(),
+      axis.ticks.x = element_blank(),
+      panel.border = element_rect(color = "grey", fill = NA, size = 1),
+      text = element_text(family = "Times New Roman", size = 25))  # Cambiar la fuente a Times New Roman
+
+dev.off()  # Cierra el dispositivo gráfico
