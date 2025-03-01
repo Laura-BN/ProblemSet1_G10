@@ -10,8 +10,21 @@ options(scipen = 999)
 
 data = readRDS(file.path(stores_path, "geih_2018.rds"))
 
+
 #------------------------------------------------------------------------------#
-# 1.1 Selección de variables características de los individuos, ocupados 
+# 1.1 Número de niños por hogar ----
+#------------------------------------------------------------------------------#
+
+# Número de niños por hogar
+data <- data %>% 
+        mutate(flag = ifelse(age <= 6, 1, 0))  %>%
+        group_by(directorio, secuencia_p) %>%
+        mutate(children_6years = sum(flag)) %>%
+        select(-flag) %>% 
+        ungroup()
+
+#------------------------------------------------------------------------------#
+# 1.2 Selección de variables características de los individuos, ocupados 
 # mayores o igual 18 años
 #------------------------------------------------------------------------------#
 # Nota: también hacemos un filtro por ocupación dado que el salario solo aplica 
@@ -31,7 +44,7 @@ data = data %>%
                 hoursWorkUsual, ingtotes, 
                 fex_c, impa, impaes, isa, isaes,
                 y_gananciaIndep_m, y_gananciaNeta_m, y_gananciaNetaAgro_m, dominio,
-                clase, cuentaPropia) %>% 
+                clase, cuentaPropia, children_6years) %>% 
     dplyr::mutate(año = 2018, 
                   
                Grupo_etario = ifelse(age >= 18 & age <= 28, "Joven",
@@ -132,7 +145,7 @@ summary(data$log_y_total_m) # log y_total_m_ha
 summary(data$log_y_total_m_ha) # log y_total_m_ha 
  
 #------------------------------------------------------------------------------#
-# 1.2 Ver missing values ----
+# 1.3 Ver missing values ----
 #------------------------------------------------------------------------------#
 
 #vis_dat(data) 
@@ -143,7 +156,7 @@ M     = cor(data_)
 corrplot(M) 
 
 #------------------------------------------------------------------------------#
-# 1.3 Eliminar missing values ----
+# 1.4 Eliminar missing values ----
 #------------------------------------------------------------------------------#
 
 # Nota DANE: si el porcentaje de datos imputados es muy alto se crea un error  
@@ -160,6 +173,7 @@ summary(data$y_total_m_ha) # Antes eliminación
 summary(data2$y_total_m_ha)
 summary(data$y_total_m)    # Antes eliminación
 summary(data2$y_total_m)
+
 
 #------------------------------------------------------------------------------#
 # 1.5 Guardar base ----
@@ -186,7 +200,7 @@ data2 =  data2 %>%
                        hoursWorkUsual, ingtotes, 
                        fex_c, impa, impaes, isa, isaes,
                        y_gananciaIndep_m, y_gananciaNeta_m, y_gananciaNetaAgro_m, dominio,
-                       clase, cuentaPropia) 
+                       clase, cuentaPropia, children_6years) 
 
 saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))

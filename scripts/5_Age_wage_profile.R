@@ -17,7 +17,8 @@ p_load(rio, # import/export data
        skimr, # summarize data 
        stargazer, #model viz and descriptive statistics
        boot,
-       xtable
+       xtable,
+       extrafont
       )   
  
 
@@ -125,10 +126,6 @@ png(file.path(view_path, "age_wage_profile.png"), family = "Times New Roman", wi
 
 
 # Sombrear el área de los intervalos de confianza
-polygon(c(age_range, rev(age_range)), 
-        c(lower_bound_exp, rev(upper_bound_exp)), 
-        col = rgb(0.6, 0.8, 1, 0.5),  # Azul claro con mayor transparencia
-        border = rgb(0, 0, 1, 0.5))  # Borde azul claro de la sombra con algo de transparencia
 
 plot(age_range, exp(predicted_log_w$fit), type = "l", 
      xlab = "Edad", ylab = "Ingreso por hora trabajada", 
@@ -139,12 +136,14 @@ plot(age_range, exp(predicted_log_w$fit), type = "l",
      lwd = 2 
     )
 
+polygon(c(age_range, rev(age_range)), 
+        c(lower_bound_exp, rev(upper_bound_exp)), 
+        col = rgb(0.6, 0.8, 1, 0.4),  # Azul claro con mayor transparencia
+        border = rgb(0, 0, 1, 0.4))  # Borde azul claro de la sombra con algo de transparencia
+
 # Añadir los intervalos de confianza
-lines(age_range, lower_bound, col = "blue", lty = 2)  # Línea para el límite inferior (azul y línea discontinua)
-lines(age_range, upper_bound, col = "blue", lty = 2)  # Línea para el límite superior (azul y línea discontinua)
-
-
-
+lines(age_range, lower_bound, col = "lightblue", lty = 2)  # Línea para el límite inferior (azul y línea discontinua)
+lines(age_range, upper_bound, col = "lightblue", lty = 2)  # Línea para el límite superior (azul y línea discontinua)
 
 dev.off()  # Cierra el dispositivo gráfico
 
