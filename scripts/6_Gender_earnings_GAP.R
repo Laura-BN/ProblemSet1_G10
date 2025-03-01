@@ -21,14 +21,6 @@ summary(data[, c( "Mujer", "age", "Max_nivel_educacion2", "cuentaPropia",
 sapply(data[, c("Mujer", "age", "Max_nivel_educacion2",  "cuentaPropia",
                 "Experiencia_emp_act", "Tamaño_firma", "Full_time", 
                 "formal", "Jefe_hogar")], class)
-
-#Para revisar posibles bad controls revisamos correlacion de variables 
-num_vars <- data %>% 
-            select(Mujer, age, Experiencia_emp_act, age, Full_time,
-                   formal, Jefe_hogar, cuentaPropia)
-
-cor_matrix <- cor(num_vars, use = "complete.obs")
-print(cor_matrix)
         
 # Estimacion condicional 
 cond_reg <- lm(log_y_total_m_ha ~ Mujer + poly(age, 2, raw = TRUE) + 
@@ -40,7 +32,7 @@ cond_reg <- lm(log_y_total_m_ha ~ Mujer + poly(age, 2, raw = TRUE) +
 stargazer(uncond_reg, cond_reg, type = "text", digits=4)
 
 
-# 4.c. FWL -------------------------------------------------------------------- //
+# 4.b - 1 FWL ------------------------------------------------------------------ //
 
 #1) Regresar todas las variable Mujer en las variables de control y tomar residuos
 data = data %>% 
@@ -68,7 +60,7 @@ data = data %>%
 fwl_reg = lm(IncomeResidF~MujerResidF,data)
 stargazer(cond_reg,fwl_reg, type="text",digits=4) 
 
-# 4.d. FWL con bootstrap ---------------------------------------------------- //
+# 4.b - 2 FWL with bootstrap --------------------------------------------------- //
 boot_stat  <- function(data, index){
   model <- lm(IncomeResidF ~ MujerResidF, data = data, subset = index)  
   return(c(coef(model)[2], summary(model)$r.squared)) # Devuelve coef y R^2
@@ -81,7 +73,7 @@ round(boot_stat(data, 1:nrow(data)), 4)
 set.seed(321)
 boot(data, boot_stat, R = 10000)
 
-# 4.e. Graficar el perfil de edad-salario previsto y estimar las “edades pico” por genero 
+# 4.c. Graficar el perfil de edad-salario previsto y estimar las “edades pico” por genero 
 
 # Función para calcular predicciones por género
 predictions_gender <- function(data, indices, gender) {
@@ -186,7 +178,7 @@ cat("Diferencia en edad pico (Mujeres - Hombres):", mean(diff_peak_ages), "±", 
 cat("IC 95% de la diferencia:", ci_diff, "\n")
 
 
-# Graficar las predicciones por género con las peak age
+# Graficar las predicciones por género con las peak age  ----------------------- //
 fig_peak_age = ggplot(pred_data_gender, aes(x = age, y = predicted_log_salaries, color = Gender)) +
   geom_line(size = 1.1) + 
   geom_ribbon(aes(ymin = conf_low, ymax = conf_high, fill = Gender), alpha = 0.15) + 
