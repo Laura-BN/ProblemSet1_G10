@@ -1,5 +1,15 @@
+    Modelo       MSE
+1 Modelo 1 0.8297780
+2 Modelo 2 0.6482239
+3 Modelo 3 0.6434634
+4 Modelo 4 0.6361157
+5 Modelo 5 0.6364360
+6 Modelo 6 0.6218815
+7 Modelo 7 0.6220280
+8 Modelo 8 0.5903431
+9 Modelo 9 0.5905065
 % latex table generated in R 4.4.2 by xtable 1.8-4 package
-% Fri Feb 28 11:49:31 2025
+% Fri Feb 28 17:08:50 2025
 \begin{table}[ht]
 \centering
 \begin{tabular}{lr}

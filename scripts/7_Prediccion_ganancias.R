@@ -455,8 +455,27 @@ for (i in seq_along(formulas_min_MSE)) {
 
 }
 
-colnames(mse_scores)[2]       = "MSE_CV"
+# Tablas MSE CV y LOOCV: ajuste 
+
 colnames(mse_scores_LOOCV)[2] = "MSE_LOOCV"
 
-tabla_VF_MSE = cbind(mse_scores, mse_scores_LOOCV[ , 2]) 
+mse_scores_89 = mse_scores[8:9,]
+colnames(mse_scores_89)[2]       = "MSE_CV"
+
+tabla_VF_MSE = cbind(mse_scores_89, mse_scores_LOOCV[ , 2]) 
 tabla_VF_MSE
+colnames(tabla_VF_MSE)[3]       = "MSE_LOOCV"
+tabla_VF_MSE
+
+# Guardar
+
+tabla_VF_LOOCV_MSE = file.path(view_path, "mse_scores_CV_LOOCV_p5.txt")
+sink(tabla_VF_LOOCV_MSE)
+tabla_VF_MSE
+
+
+tabla_VF_MSE_1 = xtable(tabla_VF_MSE, digits = 5)
+print(tabla_VF_MSE_1, type = "latex", include.rownames = FALSE)
+sink(NULL)
+tabla_VF_MSE
+

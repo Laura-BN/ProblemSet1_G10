@@ -1,6 +1,6 @@
 
 % Table created by stargazer v.5.2.3 by Marek Hlavac, Social Policy Institute. E-mail: marek.hlavac at gmail.com
-% Date and time: Fri, Feb 28, 2025 - 11:49:29
+% Date and time: Fri, Feb 28, 2025 - 17:08:48
 \begin{tabular}{@{\extracolsep{5pt}}lccccccccc} 
 \\[-1.8ex]\hline 
 \hline \\[-1.8ex] 
@@ -27,16 +27,16 @@
  poly(age, 3, raw = TRUE)3 &  &  &  & 0.00001 &  & 0.00001 &  & 0.00001 &  \\ 
   &  &  &  & (0.00001) &  & (0.00001) &  & (0.00001) &  \\ 
   & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)1 &  &  &  &  & 0.129$^{**}$ &  & 0.103 &  & 0.106 \\ 
-  &  &  &  &  & (0.064) &  & (0.124) &  & (0.118) \\ 
+ poly(age, 4, raw = TRUE)1 &  &  &  &  & 0.108 &  & 0.103 &  & 0.106 \\ 
+  &  &  &  &  & (0.127) &  & (0.124) &  & (0.118) \\ 
   & & & & & & & & & \\ 
  poly(age, 4, raw = TRUE)2 &  &  &  &  & $-$0.002 &  & $-$0.002 &  & $-$0.002 \\ 
-  &  &  &  &  & (0.002) &  & (0.004) &  & (0.004) \\ 
+  &  &  &  &  & (0.004) &  & (0.004) &  & (0.004) \\ 
   & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)3 &  &  &  &  & 0.00000 &  & 0.00001 &  & 0.00002 \\ 
-  &  &  &  &  & (0.00003) &  & (0.0001) &  & (0.0001) \\ 
+ poly(age, 4, raw = TRUE)3 &  &  &  &  & 0.00002 &  & 0.00001 &  & 0.00002 \\ 
+  &  &  &  &  & (0.0001) &  & (0.0001) &  & (0.0001) \\ 
   & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)4 &  &  &  &  & 0.00000 &  & $-$0.00000 &  & $-$0.00000 \\ 
+ poly(age, 4, raw = TRUE)4 &  &  &  &  & $-$0.00000 &  & $-$0.00000 &  & $-$0.00000 \\ 
   &  &  &  &  & (0.00000) &  & (0.00000) &  & (0.00000) \\ 
   & & & & & & & & & \\ 
  I(Max\_nivel\_educacion2)Secundaria completa &  & 0.151$^{***}$ & 0.143$^{***}$ & 1.359$^{**}$ & $-$0.052 & 1.279$^{*}$ & $-$0.120 & 0.911 & $-$0.334 \\ 
@@ -69,29 +69,17 @@
  poly(Experiencia\_emp\_act, 3, raw = TRUE)3 &  &  &  & 0.000$^{***}$ &  & 0.000$^{***}$ &  & 0.000$^{***}$ &  \\ 
   &  &  &  & (0.000) &  & (0.000) &  & (0.000) &  \\ 
   & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = T)1 &  &  &  &  & 0.006$^{***}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.0005) &  &  &  &  \\ 
+ poly(Experiencia\_emp\_act, 4, raw = TRUE)1 &  &  &  &  & 0.006$^{***}$ &  & 0.005$^{***}$ &  & 0.004$^{***}$ \\ 
+  &  &  &  &  & (0.0005) &  & (0.0005) &  & (0.0005) \\ 
   & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = T)2 &  &  &  &  & $-$0.00003$^{***}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.00000) &  &  &  &  \\ 
+ poly(Experiencia\_emp\_act, 4, raw = TRUE)2 &  &  &  &  & $-$0.00003$^{***}$ &  & $-$0.00003$^{***}$ &  & $-$0.00003$^{***}$ \\ 
+  &  &  &  &  & (0.00000) &  & (0.00000) &  & (0.00000) \\ 
   & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = T)3 &  &  &  &  & 0.00000$^{***}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.000) &  &  &  &  \\ 
+ poly(Experiencia\_emp\_act, 4, raw = TRUE)3 &  &  &  &  & 0.00000$^{***}$ &  & 0.00000$^{***}$ &  & 0.00000$^{***}$ \\ 
+  &  &  &  &  & (0.000) &  & (0.000) &  & (0.000) \\ 
   & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = T)4 &  &  &  &  & $-$0.000$^{***}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.000) &  &  &  &  \\ 
-  & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = TRUE)1 &  &  &  &  &  &  & 0.005$^{***}$ &  & 0.004$^{***}$ \\ 
-  &  &  &  &  &  &  & (0.0005) &  & (0.0005) \\ 
-  & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = TRUE)2 &  &  &  &  &  &  & $-$0.00003$^{***}$ &  & $-$0.00003$^{***}$ \\ 
-  &  &  &  &  &  &  & (0.00000) &  & (0.00000) \\ 
-  & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = TRUE)3 &  &  &  &  &  &  & 0.00000$^{***}$ &  & 0.00000$^{***}$ \\ 
-  &  &  &  &  &  &  & (0.000) &  & (0.000) \\ 
-  & & & & & & & & & \\ 
- poly(Experiencia\_emp\_act, 4, raw = TRUE)4 &  &  &  &  &  &  & $-$0.000$^{***}$ &  & $-$0.000$^{***}$ \\ 
-  &  &  &  &  &  &  & (0.000) &  & (0.000) \\ 
+ poly(Experiencia\_emp\_act, 4, raw = TRUE)4 &  &  &  &  & $-$0.000$^{***}$ &  & $-$0.000$^{***}$ &  & $-$0.000$^{***}$ \\ 
+  &  &  &  &  & (0.000) &  & (0.000) &  & (0.000) \\ 
   & & & & & & & & & \\ 
  I(sizeFirm\_cat)11-50 empl &  &  & $-$0.088$^{***}$ & $-$0.097$^{***}$ & $-$0.097$^{***}$ & $-$0.082$^{***}$ & $-$0.082$^{***}$ & $-$0.095$^{***}$ & $-$0.095$^{***}$ \\ 
   &  &  & (0.020) & (0.020) & (0.020) & (0.020) & (0.020) & (0.018) & (0.018) \\ 
@@ -192,89 +180,41 @@
  Mujer:poly(age, 4, raw = TRUE)4 &  &  &  &  & 0.00000 &  & 0.00000 &  & 0.00000 \\ 
   &  &  &  &  & (0.00000) &  & (0.00000) &  & (0.00000) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Primaria completa:poly(age, 4, raw = T)1 &  &  &  &  & $-$0.021 &  &  &  &  \\ 
-  &  &  &  &  & (0.139) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)1:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  & 0.058 &  & 0.061 &  & 0.072 \\ 
+  &  &  &  &  & (0.143) &  & (0.140) &  & (0.133) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Secundaria completa:poly(age, 4, raw = T)1 &  &  &  &  & 0.037 &  &  &  &  \\ 
-  &  &  &  &  & (0.087) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)2:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  & $-$0.004 &  & $-$0.004 &  & $-$0.004 \\ 
+  &  &  &  &  & (0.005) &  & (0.005) &  & (0.004) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Sin educación completa:poly(age, 4, raw = T)1 &  &  &  &  & $-$0.245$^{**}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.102) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)3:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  & 0.0001 &  & 0.0001 &  & 0.0001 \\ 
+  &  &  &  &  & (0.0001) &  & (0.0001) &  & (0.0001) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Terciaria completa:poly(age, 4, raw = T)1 &  &  &  &  &  &  &  &  &  \\ 
-  &  &  &  &  &  &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)4:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  & $-$0.00000 &  & $-$0.00000 &  & $-$0.00000 \\ 
+  &  &  &  &  & (0.00000) &  & (0.00000) &  & (0.00000) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Primaria completa:poly(age, 4, raw = T)2 &  &  &  &  & $-$0.001 &  &  &  &  \\ 
-  &  &  &  &  & (0.005) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)1:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  & $-$0.224 &  & $-$0.185 &  & $-$0.169 \\ 
+  &  &  &  &  & (0.152) &  & (0.149) &  & (0.141) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Secundaria completa:poly(age, 4, raw = T)2 &  &  &  &  & $-$0.004 &  &  &  &  \\ 
-  &  &  &  &  & (0.003) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)2:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  & 0.007 &  & 0.005 &  & 0.004 \\ 
+  &  &  &  &  & (0.005) &  & (0.005) &  & (0.005) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Sin educación completa:poly(age, 4, raw = T)2 &  &  &  &  & 0.006$^{*}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.003) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)3:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  & $-$0.0001 &  & $-$0.0001 &  & $-$0.00005 \\ 
+  &  &  &  &  & (0.0001) &  & (0.0001) &  & (0.0001) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Terciaria completa:poly(age, 4, raw = T)2 &  &  &  &  &  &  &  &  &  \\ 
-  &  &  &  &  &  &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)4:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  & 0.00000 &  & 0.00000 &  & 0.00000 \\ 
+  &  &  &  &  & (0.00000) &  & (0.00000) &  & (0.00000) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Primaria completa:poly(age, 4, raw = T)3 &  &  &  &  & 0.00002 &  &  &  &  \\ 
-  &  &  &  &  & (0.0001) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)1:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  & 0.021 &  & $-$0.012 &  & $-$0.015 \\ 
+  &  &  &  &  & (0.139) &  & (0.136) &  & (0.128) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Secundaria completa:poly(age, 4, raw = T)3 &  &  &  &  & 0.0001$^{**}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.00005) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)2:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  & 0.001 &  & 0.001 &  & 0.001 \\ 
+  &  &  &  &  & (0.005) &  & (0.004) &  & (0.004) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Sin educación completa:poly(age, 4, raw = T)3 &  &  &  &  & $-$0.0001 &  &  &  &  \\ 
-  &  &  &  &  & (0.0001) &  &  &  &  \\ 
+ poly(age, 4, raw = TRUE)3:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  & $-$0.00002 &  & $-$0.00003 &  & $-$0.00002 \\ 
+  &  &  &  &  & (0.0001) &  & (0.0001) &  & (0.0001) \\ 
   & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Terciaria completa:poly(age, 4, raw = T)3 &  &  &  &  &  &  &  &  &  \\ 
-  &  &  &  &  &  &  &  &  &  \\ 
-  & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Primaria completa:poly(age, 4, raw = T)4 &  &  &  &  & $-$0.00000 &  &  &  &  \\ 
-  &  &  &  &  & (0.00000) &  &  &  &  \\ 
-  & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Secundaria completa:poly(age, 4, raw = T)4 &  &  &  &  & $-$0.00000$^{**}$ &  &  &  &  \\ 
-  &  &  &  &  & (0.00000) &  &  &  &  \\ 
-  & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Sin educación completa:poly(age, 4, raw = T)4 &  &  &  &  & 0.00000 &  &  &  &  \\ 
-  &  &  &  &  & (0.00000) &  &  &  &  \\ 
-  & & & & & & & & & \\ 
- I(Max\_nivel\_educacion2)Terciaria completa:poly(age, 4, raw = T)4 &  &  &  &  &  &  &  &  &  \\ 
-  &  &  &  &  &  &  &  &  &  \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)1:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  &  &  & 0.061 &  & 0.072 \\ 
-  &  &  &  &  &  &  & (0.140) &  & (0.133) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)2:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  &  &  & $-$0.004 &  & $-$0.004 \\ 
-  &  &  &  &  &  &  & (0.005) &  & (0.004) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)3:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  &  &  & 0.0001 &  & 0.0001 \\ 
-  &  &  &  &  &  &  & (0.0001) &  & (0.0001) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)4:I(Max\_nivel\_educacion2)Secundaria completa &  &  &  &  &  &  & $-$0.00000 &  & $-$0.00000 \\ 
-  &  &  &  &  &  &  & (0.00000) &  & (0.00000) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)1:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  &  &  & $-$0.185 &  & $-$0.169 \\ 
-  &  &  &  &  &  &  & (0.149) &  & (0.141) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)2:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  &  &  & 0.005 &  & 0.004 \\ 
-  &  &  &  &  &  &  & (0.005) &  & (0.005) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)3:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  &  &  & $-$0.0001 &  & $-$0.00005 \\ 
-  &  &  &  &  &  &  & (0.0001) &  & (0.0001) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)4:I(Max\_nivel\_educacion2)Sin educación completa &  &  &  &  &  &  & 0.00000 &  & 0.00000 \\ 
-  &  &  &  &  &  &  & (0.00000) &  & (0.00000) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)1:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  &  &  & $-$0.012 &  & $-$0.015 \\ 
-  &  &  &  &  &  &  & (0.136) &  & (0.128) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)2:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  &  &  & 0.001 &  & 0.001 \\ 
-  &  &  &  &  &  &  & (0.004) &  & (0.004) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)3:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  &  &  & $-$0.00003 &  & $-$0.00002 \\ 
-  &  &  &  &  &  &  & (0.0001) &  & (0.0001) \\ 
-  & & & & & & & & & \\ 
- poly(age, 4, raw = TRUE)4:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  &  &  & 0.00000 &  & 0.00000 \\ 
-  &  &  &  &  &  &  & (0.00000) &  & (0.00000) \\ 
+ poly(age, 4, raw = TRUE)4:I(Max\_nivel\_educacion2)Terciaria completa &  &  &  &  & 0.00000 &  & 0.00000 &  & 0.00000 \\ 
+  &  &  &  &  & (0.00000) &  & (0.00000) &  & (0.00000) \\ 
   & & & & & & & & & \\ 
  Constant & 7.601$^{***}$ & 7.501$^{***}$ & 7.508$^{***}$ & 7.146$^{***}$ & 6.916$^{***}$ & 7.399$^{***}$ & 7.284$^{***}$ & 7.134$^{***}$ & 6.845$^{***}$ \\ 
   & (0.071) & (0.065) & (0.064) & (0.624) & (1.419) & (0.610) & (1.387) & (0.581) & (1.315) \\ 
