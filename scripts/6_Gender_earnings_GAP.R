@@ -70,19 +70,17 @@ fwl_reg = lm(IncomeResidF~MujerResidF,data)
 stargazer(cond_reg,fwl_reg, type="text",digits=4) 
 
 # 4.d. FWL con bootstrap ---------------------------------------------------- //
-boot_stat  <-function(data,index){
-  
-  coef(lm(log_y_total_m_ha ~ Mujer + poly(age, 2, raw = TRUE) + 
-            Max_nivel_educacion2 + poly(Experiencia_emp_act, 2, raw = TRUE) + 
-            Tamaño_firma + Full_time + formal, data = data, subset = index))[2]
-  }
+boot_stat  <- function(data, index){
+  model <- lm(IncomeResidF ~ MujerResidF, data = data, subset = index)  
+  return(c(coef(model)[2], summary(model)$r.squared)) # Devuelve coef y R^2
+}
 
 #check
-boot_stat(data,1:nrow(data))
+round(boot_stat(data, 1:nrow(data)), 4)
 
 #Error estandar variable Mujer
 set.seed(321)
-boot(data, boot_stat, R = 5000)
+boot(data, boot_stat, R = 10000)
 
 # 4.e. Graficar el perfil de edad-salario previsto y estimar las “edades pico” por genero 
 
@@ -115,14 +113,14 @@ predictions_gender <- function(data, indices, gender) {
 
 # Bootstrap para mujeres
 set.seed(321)
-boot_women <- boot(data = data, statistic = predictions_gender, R = 5000, gender = 1)
+boot_women <- boot(data = data, statistic = predictions_gender, R = 10000, gender = 1)
 conf_women <- t(sapply(1:length(seq(18, 91, by = 1)), function(i) {
   boot.ci(boot_women, type = "perc", index = i)$percent[4:5]
 }))
 
 # Bootstrap para hombres
 set.seed(321)
-boot_men <- boot(data = data, statistic = predictions_gender, R = 5000, gender = 0)
+boot_men <- boot(data = data, statistic = predictions_gender, R = 10000, gender = 0)
 conf_men <- t(sapply(1:length(seq(18, 91, by = 1)), function(i) {
   boot.ci(boot_men, type = "perc", index = i)$percent[4:5]
 }))
@@ -170,25 +168,30 @@ cat("Peak age for women:", peak_age_women, "\n")
 cat("Peak age for men:", peak_age_men, "\n")
 
 # Graficar las predicciones por género con las peak age
-ggplot(pred_data_gender, aes(x = age, y = predicted_log_salaries, color = Gender)) +
-  geom_line(size = 1) +
-  geom_ribbon(aes(ymin = conf_low, ymax = conf_high, fill = Gender), alpha = 0.2) +
-  geom_vline(xintercept = peak_age_women, linetype = "dashed", color = "red", size = 1) +
-  geom_vline(xintercept = peak_age_men, linetype = "dashed", color = "blue", size = 1) +
+fig_peak_age = ggplot(pred_data_gender, aes(x = age, y = predicted_log_salaries, color = Gender)) +
+  geom_line(size = 1.1) + 
+  geom_ribbon(aes(ymin = conf_low, ymax = conf_high, fill = Gender), alpha = 0.15) + 
+  geom_vline(xintercept = peak_age_women, linetype = "dashed", color = "gray40", size = 1) +
+  geom_vline(xintercept = peak_age_men, linetype = "dashed", color = "black", size = 1) +
   labs(
-    title = "Age-Wage Profile por Género con Intervalos Bootstrap y Edades Pico", 
     x = "Edad", 
     y = "Log(Salario Predicho)",
     color = "Género",
     fill = "Género"
   ) +
-  scale_color_manual(values = c("Mujer" = "red", "Hombre" = "blue")) +
-  scale_fill_manual(values = c("Mujer" = "red", "Hombre" = "blue")) +
-  theme_minimal() +
-  annotate("text", x = peak_age_women, y = max(pred_data_gender$predicted_log_salaries) * 0.9, 
-           label = paste("Edad Pico Mujer: ", round(peak_age_women, 1)), color = "red") +
-  annotate("text", x = peak_age_men, y = max(pred_data_gender$predicted_log_salaries) * 0.9, 
-           label = paste("Edad Pico Hombre: ", round(peak_age_men, 1)), color = "blue")
-
-
-
+  scale_color_manual(values = c("Mujer" = "gray40", "Hombre" = "black")) + 
+  scale_fill_manual(values = c("Mujer" = "gray60", "Hombre" = "gray80")) +  
+  theme_minimal() +  
+  theme(
+    panel.grid.major = element_blank(),  
+    panel.grid.minor = element_blank(),  
+    axis.line = element_line(color = "black"), 
+    legend.position = "bottom"  
+  ) +
+  annotate("text", x = peak_age_women, 
+           y = max(pred_data_gender$predicted_log_salaries) - 0.37, 
+           label = paste(round(peak_age_women, 1)), color = "gray40") + 
+  annotate("text", x = peak_age_men, 
+           y = max(pred_data_gender$predicted_log_salaries) + 0.1, 
+           label = paste(round(peak_age_men, 1)), color = "black") 
+  ggsave(file.path(view_path, "wage_peak_age.png"), plot = fig_peak_age)
