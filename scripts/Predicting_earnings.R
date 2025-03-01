@@ -5,7 +5,7 @@
 options(scipen = 999)
 source(file.path(scripts_path, "1_master.R"))
 data = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
-table(data$Ocupacion)
+
 #------------------------------------------------------------------------------#
 # a. Divida la muestra en dos ----
 # una muestra de entrenamiento (70 \%) y una muestra de prueba (30 \%).
@@ -48,7 +48,8 @@ formulas = list(
                         Full_time + formal,
 
            # Modelos adicionales punto 5
-           form_3_pt4 = log_y_total_m_ha ~ 
+           
+               form_3 = log_y_total_m_ha ~ 
                         Mujer + 
                         poly(age, 2, raw = TRUE) + 
                         I(Max_nivel_educacion2) + 
@@ -64,7 +65,29 @@ formulas = list(
                         I(sizeFirm_cat) + 
                         Full_time + formal,
 
-              form_5 = log_y_total_m_ha ~ 
+               form_5 = log_y_total_m_ha ~ 
+                        Mujer + 
+                        poly(age, 2, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + 
+                        poly(Experiencia_emp_act, 2, raw = TRUE) +                    
+                        I(sizeFirm_cat) + 
+                        Full_time + formal, # + 
+                        ########VAR NIÑOS HOGAR ,
+           
+           ################################ VAR NIÑOS HOGAR FORMAS 6-11 ################################################
+           
+
+              form_6 = log_y_total_m_ha ~ 
+                        Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
+                        poly(age, 3, raw = TRUE) + 
+                        I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
+                        poly(Experiencia_emp_act, 3, raw = TRUE) +
+                        I(sizeFirm_cat) + 
+                        Full_time + formal, # + 
+                        ########VAR NIÑOS HOGAR ,
+           
+
+              form_7 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
                         poly(age, 4, raw = TRUE) + 
                         I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
@@ -72,7 +95,7 @@ formulas = list(
                         I(sizeFirm_cat) + 
                         Full_time + formal, 
            
-              form_6 = log_y_total_m_ha ~ 
+              form_8 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
                         poly(age, 3, raw = TRUE) + 
                         I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
@@ -81,7 +104,7 @@ formulas = list(
                         Full_time + formal +
                         I(Ocupacion) + I(oficio), # más categorías 
            
-              form_7 = log_y_total_m_ha ~ 
+              form_9 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
                         poly(age, 4, raw = TRUE) + 
                         I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
@@ -90,7 +113,7 @@ formulas = list(
                         Full_time + formal + 
                         I(Ocupacion) + I(oficio), # más categorías 
 
-              form_8 = log_y_total_m_ha ~ 
+              form_10 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
                         poly(age, 3, raw = TRUE) + 
                         I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
@@ -100,7 +123,7 @@ formulas = list(
                         I(Ocupacion) + I(oficio) + # más categorías
                         I(Cot_pension) + Jefe_hogar + I(Estrato), # más categorías 
            
-              form_9 = log_y_total_m_ha ~ 
+              form_11 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 4, raw = TRUE):Mujer + # interacción
                         poly(age, 4, raw = TRUE) + 
                         I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
