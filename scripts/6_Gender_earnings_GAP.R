@@ -190,8 +190,8 @@ fig_peak_age = ggplot(pred_data_gender, aes(x = age, y = predicted_log_salaries,
   ) +
   annotate("text", x = peak_age_women, 
            y = max(pred_data_gender$predicted_log_salaries) - 0.37, 
-           label = paste(round(peak_age_women, 1)), color = "gray40") + 
+           label = paste(round(peak_age_women, 1)), color = "gray40", size = 5, hjust = 1.2) + 
   annotate("text", x = peak_age_men, 
            y = max(pred_data_gender$predicted_log_salaries) + 0.1, 
-           label = paste(round(peak_age_men, 1)), color = "black") 
-  ggsave(file.path(view_path, "wage_peak_age.png"), plot = fig_peak_age)
+           label = paste(round(peak_age_men, 1)), color = "black", size = 5, hjust = 1.5) 
+   ggsave(file.path(view_path, "wage_peak_age.png"), plot = fig_peak_age)
