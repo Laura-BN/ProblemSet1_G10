@@ -214,7 +214,6 @@ mse_scores
 mse_scores_table = file.path(view_path, "mse_scores_CV_p5.txt")
 sink(mse_scores_table)
 
-mse_scores
 mse_scores_1 = xtable(mse_scores, digits = 5)
 
 print(mse_scores_1, type = "latex", include.rownames = FALSE)
