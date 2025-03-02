@@ -11,8 +11,8 @@ rm(list = ls())
 #-----------------------------------------------------------------------------//
 
 paths = c(
-  "H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub",
-  "/Users/camilaortiz/Dropbox/PEG/BigData",
+  #"H:/My Drive/1. General/3. Académico/3. Uniandes/Machine Learning + BD/Repos_GitHub",
+  #"/Users/camilaortiz/Dropbox/PEG/BigData",
   "G:/Mi unidad/Academia/Maestría MEcA/Big data y machine learning/Taller 1"
 )
 
