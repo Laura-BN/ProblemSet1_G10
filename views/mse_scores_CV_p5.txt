@@ -14,7 +14,7 @@
 13 Modelo 13 0.5722381
 14 Modelo 14 0.5737733
 % latex table generated in R 4.4.2 by xtable 1.8-4 package
-% Sat Mar  1 16:10:38 2025
+% Sun Mar  2 08:26:10 2025
 \begin{table}[ht]
 \centering
 \begin{tabular}{lr}

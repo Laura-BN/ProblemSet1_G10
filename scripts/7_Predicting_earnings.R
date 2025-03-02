@@ -536,6 +536,13 @@ for (i in seq_along(formulas_min_MSE)) {
 
 }
 
+# GUARDAR MODELOS DE LOOCV: 
+
+saveRDS(modelos_LOOCV, file = paste0(view_path, "/modelos_LOOCV.rds"))
+# modelos_LOOCV = readRDS("modelos_LOOCV.rds")
+
+
+
 # Tablas MSE CV y LOOCV: ajuste 
 
 colnames(mse_scores_LOOCV)[2] = "MSE_LOOCV"
@@ -565,26 +572,54 @@ tabla_VF_MSE
 # Gráfico valores ajustados y observados----
 #------------------------------------------------------------------------------#
 
-prediccioness = predict(modelos[n_modelos_min_MSE[1]], data)
-
 resultados = data.frame(
   Obsr = seq_along(data$directorio),
   Observado = data$log_y_total_m_ha,  
-  Ajustado = predict(modelos[n_modelos_min_MSE[1]], data)  
-)
+  Ajustado_CV = predict(modelos[n_modelos_min_MSE[1]], data), 
+  Ajustado_LOOCV = predict(modelos_LOOCV[1], data))
 
 head(resultados)
-colnames(resultados) = c("Obsr", "Ajustado", "Observado")
+colnames(resultados) = c("Obsr", "Observado", "Ajustado_CV", "Ajustado_LOOCV")
 
-ggplot(resultados, aes(x = Obsr )) +
-  geom_line(aes(y = Observado, color = "Observado"), size = 0.8, alpha = 0.7) +  
-  geom_line(aes(y = Ajustado, color = "Ajustado"), size = 0.8, alpha = 0.2) +  
+ajus_obs_CV_LOOCV = 
+  ggplot(resultados, aes(x = Observado)) +
+  geom_density(aes(fill = "Observado"), alpha = 0.5, color = NA) +
+  geom_density(aes(x = Ajustado_CV, fill = "Ajustado CV"), alpha = 0.2, color = NA) +
+  geom_density(aes(x = Ajustado_LOOCV, fill = "Ajustado LOOCV"), alpha = 0.1, color = NA) +
   
-  labs(title = "Valores Observados vs. Ajustados",
-       x = "observación",  
-       y = "Log ingreso por hora",
-       color = "") +  
-  scale_color_manual(values = c("Observado" = "blue", "Ajustado" = "red")) +  
-  theme_minimal()
+  labs(title = "Densidad de valores observados vs. ajustados: CV y LOOCV (modelo 13)",
+       x = "Log ingreso por hora",
+       y = "Densidad",
+       fill = "Valores") +
+  scale_fill_manual(values = c("Observado" = "gray", "Ajustado CV" = "blue", "Ajustado LOOCV" = "#00EEEE")) +
+  theme_classic()
+
+ajus_obs_CV_LOOCV
+
+resultados$Error_CV = resultados$Observado - resultados$Ajustado_CV
+resultados$Error_LOOCV = resultados$Observado - resultados$Ajustado_LOOCV
+
+erores_CV_LOOCV = 
+  ggplot(resultados) +
+  geom_density(aes(x = Error_CV, fill = "Error CV"), alpha = 0.2, color = NA) +
+  geom_density(aes(x = Error_LOOCV, fill = "Error LOOCV"), alpha = 0.1, color = NA) +
+  
+  labs(title = "Densidad de Errores de Predicción (modelo 13) CV vs. LOOCV",
+       x = "Error de predicción log ingreso por hora",
+       y = "Densidad",
+       fill = "Errores de predicción") +
+  scale_fill_manual(values = c("Error CV" = "blue", "Error LOOCV" = "#00EEEE")) +
+  theme_classic()
+
+erores_CV_LOOCV
+
+e_ajus_ob_CV_LOOV = grid.arrange(ajus_obs_CV_LOOCV, erores_CV_LOOCV, ncol = 2, 
+             top = textGrob("",
+             gp = gpar(fontsize = 14)))
+
+
+ggsave(file.path(paste0(view_path, "/e_ajus_ob_CV_LOOV_m13_p5.png")), 
+       plot = e_ajus_ob_CV_LOOV, width = 15, height = 10, dpi = 300)
+
 
 
