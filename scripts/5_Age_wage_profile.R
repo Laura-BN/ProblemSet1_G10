@@ -148,23 +148,33 @@ lines(age_range, upper_bound, col = "lightblue", lty = 2)  # Línea para el lím
 dev.off()  # Cierra el dispositivo gráfico
 
 
-
 # Edad pico ----------------------------
 
-# Calcular edad pico
-age_peak_final <- -coef(model2_pt3)[2] / (2 * coef(model2_pt3)[3])
-age_peak_final
-
-# Función para calcular la edad pico con la variable 'w' explícita
+# Función para calcular la edad pico a partir de un modelo
 age_peak_func <- function(data, indices) {
-  d <- data[indices, ]
-  model_boot <- lm(d$logB_y_total_m_ha ~ d$age + I(d$age^2), data = d)
-  return(-coef(model_boot)[2] / (2 * coef(model_boot)[3]))
-}
+                  # Crear una muestra bootstrap utilizando los índices proporcionados
+                  data_bootstrap <- data[indices, ]
+                  
+                  # Ajustar el modelo de regresión en la muestra bootstrap
+                  model_boot <- lm(logB_y_total_m_ha ~ poly(age, 2, raw = TRUE), data = data_bootstrap)
+                  
+                  # Obtener los coeficientes del modelo bootstrap
+                  coef_model_boot <- coef(model_boot)
+                  
+                  # Calcular la edad pico
+                  peak_age <- -coef_model_boot["poly(age, 2, raw = TRUE)1"] / (2 * coef_model_boot["poly(age, 2, raw = TRUE)2"])
+                  
+                  return(peak_age)
+                }
 
 # Ejecutar el bootstrap
 set.seed(10101)  # Fijar semilla para reproducibilidad
-bootstrap_results <- boot(data_pt3, age_peak_func, R = 10000)
+bootstrap_results <- boot(data_pt3, statistic = age_peak_func, R = 10000)
+peak_age_women <- bootstrap_results$t0  # Edad pico estimada
+peak_age_women
+se_peak_age_women <- sd(bootstrap_results$t)  # Error estándar de la edad pico
+se_peak_age_women
+
 
 # Ver el intervalo de confianza del 95%
 boot_ci <- boot.ci(bootstrap_results, type = "bca")
@@ -176,13 +186,15 @@ upper <- boot_ci$bca[5]  # Límite superior
 
 # Crear una tabla en LaTeX con xtable
 ci_table <- data.frame(
-  "Intervalo de Confianza" = c("Límite Inferior", "Límite Superior"),
-  "Valor" = c(lower, upper))
+  "Concepto" = c("Edad pico estimada","Error estándar","Límite inferior", "Límite superior"),
+  "Valor" = c(peak_age_women, se_peak_age_women, lower, upper))
 
 
 # Imprimir la tabla en formato LaTeX
-print(xtable(ci_table, caption = "Intervalo de confianza (95%)"), type = "latex")
+print(xtable(ci_table, caption = ""), type = "latex")
 
+
+# Gráfico edad pico ----------------------------
 
 # Calcular la distribución bootstrap de la edad pico
 age_peak_bootstrap <- bootstrap_results$t
@@ -254,5 +266,8 @@ grid.arrange(age_peak_bars, age_peak_boxplot, ncol = 2)  # Colocar los gráficos
 dev.off()  # Cierra el dispositivo gráfico
 
 
+
+rango <- range(data_pt3$logB_y_total_m_ha, na.rm = TRUE)
+print(rango)
 
 
