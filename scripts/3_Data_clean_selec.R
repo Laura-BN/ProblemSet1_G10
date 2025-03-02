@@ -61,6 +61,19 @@ data = data %>%
                
               Experiencia_emp_act  = p6426,
               
+                       Oficio_cat = case_when(
+                                    substr(oficio, 1, 1) == "1" ~ "Directores y Gerentes",
+                                    substr(oficio, 1, 1) == "2" ~ "Profesionales, Científicos e Intelectuales",
+                                    substr(oficio, 1, 1) == "3" ~ "Técnicos, Profesionales Nivel Medio",
+                                    substr(oficio, 1, 1) == "4" ~ "Apoyo Administrativo",
+                                    substr(oficio, 1, 1) == "5" ~ "Trabajadores Servicios, Comercios y Mercados",
+                                    substr(oficio, 1, 1) == "6" ~ "Agricultores y Trabajadores Calificados Agro",
+                                    substr(oficio, 1, 1) == "7" ~ "Oficiales, Operarios, Artesanos y Oficios Relacionados",
+                                    substr(oficio, 1, 1) == "8" ~ "Operadores Instalaciones, Máquinas y Ensambladores",
+                                    substr(oficio, 1, 1) == "9" ~ "Ocupaciones Elementales",
+                                    TRUE ~ "Otro"), 
+              
+              
               Full_time    = ifelse(hoursWorkUsual >= 48, 1, 0),
               
               sizeFirm_cat = ifelse(sizeFirm == 1, "autoempleado",
@@ -165,10 +178,15 @@ corrplot(M)
 
 data2 = data %>%
         dplyr::filter(!is.na(y_total_m) & !is.na(y_total_m_ha)) %>% 
-        dplyr::mutate(across(c(estrato1, Grupo_etario, Edu_cat, Ocupacion_cat, 
+        dplyr::mutate(across(c(estrato1, Estrato, 
+                               Grupo_etario, Edu_cat, Ocupacion_cat, 
                                Max_nivel_educacion, Max_nivel_educacion2,
-                               Tamaño_firma, Ocupacion, Jefe_hogar_cat), as.factor))
+                               Tamaño_firma, sizeFirm, sizeFirm_cat,
+                               Ocupacion, Jefe_hogar_cat, Oficio_cat, 
+                               Jefe_hogar, oficio, Cot_pension), as.factor))
 
+
+table(data$formal)
 summary(data$y_total_m_ha) # Antes eliminación
 summary(data2$y_total_m_ha)
 summary(data$y_total_m)    # Antes eliminación
@@ -182,7 +200,7 @@ summary(data2$y_total_m)
 data2 =  data2 %>% 
          dplyr::select(directorio, Estrato, Mujer, age, ocu, oficio, orden, fex_c,
                        totalHoursWorked, formal, informal, Tamaño_firma, sizeFirm,
-                       sizeFirm_cat, regSalud,
+                       sizeFirm_cat, regSalud,Oficio_cat, 
                        Reg_salud, Cot_pension, Max_nivel_educacion, Jefe_hogar,
                        Max_nivel_educacion2, Grupo_etario, cuentaPropia, 
                        Formalidad, Ocupacion, Experiencia_emp_act, Full_time,
@@ -202,6 +220,6 @@ data2 =  data2 %>%
                        y_gananciaIndep_m, y_gananciaNeta_m, y_gananciaNetaAgro_m, dominio,
                        clase, cuentaPropia, children_6years) 
 
-saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
+# saveRDS(data2, file.path(stores_path, "geih_2018_VF.rds"))
 # bd_1 = readRDS(file.path(stores_path, "geih_2018_VF.rds"))
 #rm(data_, t1, upper_perc, upper_perc_, g1, g2, M)

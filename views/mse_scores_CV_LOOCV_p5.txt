@@ -1,13 +1,16 @@
+     Modelo    MSE_CV MSE_LOOCV
+3 Modelo 12 0.5722924 0.5582142
+4 Modelo 13 0.5722381 0.5587209
 % latex table generated in R 4.4.2 by xtable 1.8-4 package
-% Fri Feb 28 18:23:28 2025
+% Sat Mar  1 18:17:15 2025
 \begin{table}[ht]
 \centering
 \begin{tabular}{lrr}
   \hline
 Modelo & MSE\_CV & MSE\_LOOCV \\ 
   \hline
-Modelo 8 & 0.59034 & 0.57654 \\ 
-  Modelo 9 & 0.59051 & 0.57612 \\ 
+Modelo 12 & 0.57229 & 0.55821 \\ 
+  Modelo 13 & 0.57224 & 0.55872 \\ 
    \hline
 \end{tabular}
 \end{table}
