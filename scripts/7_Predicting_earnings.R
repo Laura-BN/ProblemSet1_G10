@@ -52,7 +52,7 @@ formulas = list(
                         I(Max_nivel_educacion2) +
                         poly(Experiencia_emp_act, 2, raw = TRUE) +                     
                         I(Tamaño_firma) + 
-                        Full_time + formal,
+                        Full_time + formal + I(Oficio_cat),
 
            # Modelos adicionales punto 5
            
@@ -62,7 +62,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + 
                         poly(Experiencia_emp_act, 2, raw = TRUE) +                    
                         I(sizeFirm_cat) + 
-                        Full_time + formal,
+                        Full_time + formal + I(Oficio_cat),
 
               form_4 = log_y_total_m_ha ~ 
                         Mujer + poly(age, 3, raw = TRUE):Mujer + # interacción
@@ -70,7 +70,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
                         poly(Experiencia_emp_act, 3, raw = TRUE) +
                         I(sizeFirm_cat) + 
-                        Full_time + formal,
+                        Full_time + formal + I(Oficio_cat),
 
                form_5 = log_y_total_m_ha ~ 
                         Mujer + 
@@ -78,7 +78,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + 
                         poly(Experiencia_emp_act, 2, raw = TRUE) +                    
                         I(sizeFirm_cat) + 
-                        Full_time + formal + 
+                        Full_time + formal + I(Oficio_cat) +
                         (children_6years),
            
               form_6 = log_y_total_m_ha ~ 
@@ -87,7 +87,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
                         poly(Experiencia_emp_act, 3, raw = TRUE) +
                         I(sizeFirm_cat) + 
-                        Full_time + formal + 
+                        Full_time + formal + I(Oficio_cat) +
                         (children_6years),
            
               form_7 = log_y_total_m_ha ~ 
@@ -96,7 +96,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
                         poly(Experiencia_emp_act, 4, raw = TRUE) +
                         I(sizeFirm_cat) + 
-                        Full_time + formal + 
+                        Full_time + formal + I(Oficio_cat) +
                         (children_6years),
            
                form_8 = log_y_total_m_ha ~ 
@@ -105,7 +105,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + poly(age, 3, raw = TRUE):I(Max_nivel_educacion2) + # interacción
                         poly(Experiencia_emp_act, 3, raw = TRUE) +
                         I(sizeFirm_cat) + 
-                        Full_time + formal + 
+                        Full_time + formal + I(Oficio_cat) +
                         (children_6years) + (children_6years):Mujer,
            
               form_9 = log_y_total_m_ha ~ 
@@ -114,7 +114,7 @@ formulas = list(
                         I(Max_nivel_educacion2) + poly(age, 4, raw = TRUE):I(Max_nivel_educacion2) + # interacción
                         poly(Experiencia_emp_act, 4, raw = TRUE) +
                         I(sizeFirm_cat) + 
-                        Full_time + formal + 
+                        Full_time + formal + I(Oficio_cat) +
                         (children_6years) + (children_6years):Mujer,
 
            
@@ -214,7 +214,6 @@ mse_scores
 mse_scores_table = file.path(view_path, "mse_scores_CV_p5.txt")
 sink(mse_scores_table)
 
-mse_scores
 mse_scores_1 = xtable(mse_scores, digits = 5)
 
 print(mse_scores_1, type = "latex", include.rownames = FALSE)
